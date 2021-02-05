@@ -25,3 +25,20 @@ MemeSpace is an application designed and implemented as part of the SOEN 341 cou
 | Jean-Francois Vo | jfv-2000 | 40132554 |
 | Nicolas Pinochet Brouillette | justpino7 | 40157614 |
 | Olivier Phan | silentswordxv | 40096496 |   
+
+## FrontEnd
+* The FrontEnd server runs with React.js, a node js framework.
+* To run de code locally enter this command in the command line
+```
+cd MemeSpace
+npm start
+```
+
+
+## BackEnd
+* The backend server runs with express.js, a node js framework.
+* To run de code locally enter this command in the command line
+```
+cd MemeServer
+npm start
+```
