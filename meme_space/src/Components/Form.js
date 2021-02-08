@@ -15,6 +15,7 @@ import './Form.css';
 // ];
 
 export default function Forms(props){
+
     const [form, setForm] = useState([]);
 
     useEffect(() => {
@@ -23,7 +24,7 @@ export default function Forms(props){
                 setForm(response.data);
             })
     })
-    console.log(form)
+
     return(
         <Form id={props.form_id}>
             {form.map(form_group => 
@@ -31,8 +32,7 @@ export default function Forms(props){
                     <Form.Label>{form_group.label}</Form.Label>
                     <Form.Control type={form_group.type} placeholder={form_group.placeholder}/>
                 </Form.Group>
-                    )
-            }
+            )}
             <Button variant="info">{props.confirmation_btn_label}</Button>
         </Form>
     );
