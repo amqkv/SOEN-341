@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import LoginTemplate from './Templates/LoginTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -6,23 +7,13 @@ import './App.css';
 
 function App() {
   return (
+    <Router>
     <div className="App">
-      <LoginTemplate/>
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
+      <Route exact path="/" component={LoginTemplate} />
+      <Route exact path="/login" component={LoginTemplate} />
     </div>
+    </Router>
+
   );
 }
 

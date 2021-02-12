@@ -3,7 +3,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
+import axios from 'axios';
 
 import './Templates.css';
 
@@ -12,25 +12,35 @@ export default function LoginTemplate(){
     const [loginPw, setLoginPw] = useState("");
     const [loginValidated, setLoginValidated] = useState(false);
 
+
+
     // Login form validation
     function handleLogin(e){
         let pwIsInvalid = loginPw.length < 8 || loginPw.length > 16;
 
         // If the email or password entered are not valid then the request will not be sent to backend
         if(loginEmail.length === 0 || pwIsInvalid){
-            e.preventDefault();
             e.stopPropagation();
             if(pwIsInvalid)
                 document.getElementById("loginPw").classList.add("is-invalid");
             else
                 document.getElementById("loginPw").classList.remove("is-invalid");
+            setLoginValidated(true); 
         }
-        setLoginValidated(true);
+        else
+        {
+            axios.post()
+            setLoginEmail("");
+            setLoginPw("");
+        }
+
     }
 
     // Storing the values of the user input on change
     function handleChange(e){
         const { name, value } = e.target;
+
+        let pwIsInvalid = loginPw.length < 8 || loginPw.length > 16;
 
         switch(name){
             case "loginEmail":
@@ -38,6 +48,12 @@ export default function LoginTemplate(){
             break;
             case "loginPw":
                 setLoginPw(value);
+                if(loginValidated){
+                    if(pwIsInvalid)
+                        document.getElementById("loginPw").classList.add("is-invalid");
+                    else
+                        document.getElementById("loginPw").classList.remove("is-invalid");
+                }
             break;
             default:
             break;
