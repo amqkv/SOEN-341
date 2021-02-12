@@ -12,12 +12,14 @@ export default function LoginTemplate(){
     const [loginPw, setLoginPw] = useState("");
     const [loginValidated, setLoginValidated] = useState(false);
 
-
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [registerPw, setRegisterPw] = useState("");
+    const [confirmPw, setConfirmPw] = useState("");
+    const [registerValidated, setRegisterValidated] = useState(false);
 
     // Login form validation
     function handleLogin(e){
         let pwIsInvalid = loginPw.length < 8 || loginPw.length > 16;
-
         // If the email or password entered are not valid then the request will not be sent to backend
         if(loginEmail.length === 0 || pwIsInvalid){
             e.stopPropagation();
@@ -34,6 +36,28 @@ export default function LoginTemplate(){
             setLoginPw("");
         }
 
+    }
+
+    // Register form validation
+    function handleRegister(e){
+        let pwIsInvalid = registerPw.length < 8 || registerPw.length > 16;
+        let confirmPwInvalid = registerPw !== confirmPw;
+        // If the email or password entered are not valid then the request will not be sent to backend
+        if(registerEmail.length === 0 || pwIsInvalid || confirmPwInvalid){
+            e.preventDefault();
+            e.stopPropagation();
+            if(pwIsInvalid) {
+                document.getElementById("registerPw").classList.add("is-invalid");
+            }
+            if(confirmPwInvalid) {
+                document.getElementById("confirmPw").classList.add("is-invalid");
+            }  
+            else {
+                document.getElementById("registerPw").classList.remove("is-invalid");
+                document.getElementById("confirmPw").classList.remove("is-invalid");
+            } 
+        }
+        setRegisterValidated(true);
     }
 
     // Storing the values of the user input on change
@@ -54,6 +78,16 @@ export default function LoginTemplate(){
                     else
                         document.getElementById("loginPw").classList.remove("is-invalid");
                 }
+            break;
+            case "registerEmail":
+                setRegisterEmail(value);
+                console.log(registerEmail);
+            break;
+            case "registerPw":
+                setRegisterPw(value);
+            break;
+            case "confirmPw":
+                setConfirmPw(value);
             break;
             default:
             break;
@@ -100,8 +134,52 @@ export default function LoginTemplate(){
                             <Button type="submit" variant="info">Log in</Button>
                         </Form>
                     </Tab>
-                    <Tab eventKey="register" title="Register">
 
+                    <Tab eventKey="register" title="Register">
+                         {/* Register form */}
+                         <Form id="register_form" onSubmit={handleRegister} noValidate validated={registerValidated}>
+                            <Form.Group>
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control 
+                                    id="registerEmail"
+                                    name="registerEmail"
+                                    onChange={handleChange} 
+                                    type="email" 
+                                    placeholder="Enter email"
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please enter a valid email.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control 
+                                    id="registerPw"
+                                    name="registerPw"
+                                    onChange={handleChange} 
+                                    type="password" 
+                                    placeholder="Enter password"
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Password must be at least 8 characters.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group>
+                            <Form.Label>Confirm Password</Form.Label>
+                                <Form.Control 
+                                    id="confirmPw"
+                                    name="confirmPw"
+                                    onChange={handleChange} 
+                                    type="password" 
+                                    placeholder="Confirm password"
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Passwords must match.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Button type="submit" variant="info">Register</Button>
+                        </Form>
                     </Tab>
                 </Tabs>
             </div>
