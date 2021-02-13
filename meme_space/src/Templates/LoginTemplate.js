@@ -8,11 +8,12 @@ import axios from 'axios';
 import './Templates.css';
 
 export default function LoginTemplate(){
-    const [loginEmail, setLoginEmail] = useState("");
+    const [loginUsername, setLoginUsername] = useState("");
     const [loginPw, setLoginPw] = useState("");
     const [loginValidated, setLoginValidated] = useState(false);
 
     const [registerEmail, setRegisterEmail] = useState("");
+    const [registerUsername, setRegisterUsername] = useState("");
     const [registerPw, setRegisterPw] = useState("");
     const [confirmPw, setConfirmPw] = useState("");
     const [registerValidated, setRegisterValidated] = useState(false);
@@ -21,7 +22,7 @@ export default function LoginTemplate(){
     function handleLogin(e){
         let pwIsInvalid = loginPw.length < 8 || loginPw.length > 16;
         // If the email or password entered are not valid then the request will not be sent to backend
-        if(loginEmail.length === 0 || pwIsInvalid){
+        if(loginUsername.length < 5 || pwIsInvalid){
             e.stopPropagation();
             if(pwIsInvalid)
                 document.getElementById("loginPw").classList.add("is-invalid");
@@ -32,7 +33,7 @@ export default function LoginTemplate(){
         else
         {
             axios.post()
-            setLoginEmail("");
+            setLoginUsername("");
             setLoginPw("");
         }
 
@@ -67,8 +68,8 @@ export default function LoginTemplate(){
         let pwIsInvalid = loginPw.length < 8 || loginPw.length > 16;
 
         switch(name){
-            case "loginEmail":
-                setLoginEmail(value);
+            case "loginUsername":
+                setLoginUsername(value);
             break;
             case "loginPw":
                 setLoginPw(value);
@@ -82,6 +83,9 @@ export default function LoginTemplate(){
             case "registerEmail":
                 setRegisterEmail(value);
                 console.log(registerEmail);
+            break;
+            case "registerUsername":
+                setRegisterUsername(value);
             break;
             case "registerPw":
                 setRegisterPw(value);
@@ -105,17 +109,17 @@ export default function LoginTemplate(){
                         {/* Login form */}
                         <Form id="login_form" onSubmit={handleLogin} noValidate validated={loginValidated}>
                             <Form.Group>
-                                <Form.Label>Email</Form.Label>
+                                <Form.Label>Username</Form.Label>
                                 <Form.Control 
-                                    id="loginEmail"
-                                    name="loginEmail"
+                                    id="loginUsername"
+                                    name="loginUsername"
                                     onChange={handleChange} 
-                                    type="email" 
-                                    placeholder="Enter email"
+                                    type="text" 
+                                    placeholder="Enter username"
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    Please enter a valid email.
+                                    Username must be at least 5 characters.
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group>
@@ -150,6 +154,20 @@ export default function LoginTemplate(){
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     Please enter a valid email.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control 
+                                    id="registerUsername"
+                                    name="registerUsername"
+                                    onChange={handleChange} 
+                                    type="text" 
+                                    placeholder="Enter username"
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Username must be at least 5 characters.
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group>
