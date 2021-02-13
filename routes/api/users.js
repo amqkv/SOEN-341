@@ -15,6 +15,8 @@ const User = require("../../models/User");
 //POST for register
 router.post("/register", (req, res) => {
 
+    console.log("register")
+
     //Form validation
     const{ errors, isValid } = validateRegisterInput(req.body);
 
@@ -46,7 +48,7 @@ router.post("/register", (req, res) => {
                         .then(user => res.json(user))
                         .catch(err => console.log(err));
                 });
-            });
+            });              
         }
     });
 });
@@ -54,6 +56,8 @@ router.post("/register", (req, res) => {
 //POST for login
 router.post("/login", (req,res) => {
 
+    console.log("login");
+    
     //Login validation
     if(!isValid) {
         return res.status(400).json(errors);
@@ -92,9 +96,10 @@ router.post("/login", (req,res) => {
                         });
                     }
                 );
+                return res.status(200).json({ response: "received" });
             }
             else {
-                return res.status.json({ passwordincorrect: "Incorrect email or password" });
+                return res.status(400).json({ passwordincorrect: "Incorrect email or password" });
             }
         });
     });
