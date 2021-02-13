@@ -42,3 +42,7 @@ npm start
 cd MemeServer
 npm start
 ```
+
+
+## Pull Request Process
+Pull requests will have to be reviewed by minimum 3 other team members (excluding the requester) in order to be marged to main/production/master
