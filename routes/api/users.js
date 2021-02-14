@@ -16,12 +16,13 @@ const User = require("../../models/User");
 router.post("/register", (req, res) => {
 
     console.log("register")
-
+    console.log(req.body);
     //Form validation
     const{ errors, isValid } = validateRegisterInput(req.body);
 
     //Check validation
     if(!isValid) {
+        console.log("not valid")
         return res.status(400).json(errors);
     }
 
@@ -57,9 +58,13 @@ router.post("/register", (req, res) => {
 router.post("/login", (req,res) => {
 
     console.log("login");
-    
+    console.log(req.body);
+    // Form validation
+    const{ errors, isValid } = validateLoginInput(req.body);
+
     //Login validation
     if(!isValid) {
+        console.log("not valid")
         return res.status(400).json(errors);
     }
 
@@ -70,6 +75,7 @@ router.post("/login", (req,res) => {
     User.findOne({ email }).then(user => {
         //Check if the user exists
         if(!user) {
+            console.log("user doesn't exist")
             return res.status(404).json({ emailnotFound: "Incorrect email or password" });
         }
         //Check if correct password
@@ -96,9 +102,11 @@ router.post("/login", (req,res) => {
                         });
                     }
                 );
+                console.log("login gucci")
                 return res.status(200).json({ response: "received" });
             }
             else {
+                console.log("login not gucci")
                 return res.status(400).json({ passwordincorrect: "Incorrect email or password" });
             }
         });

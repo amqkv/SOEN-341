@@ -13,6 +13,7 @@ export default function LoginTemplate(){
     const [loginValidated, setLoginValidated] = useState(false);
 
     const [registerEmail, setRegisterEmail] = useState("");
+    const [registerName, setRegisterName] = useState("");
     const [registerUsername, setRegisterUsername] = useState("");
     const [registerPw, setRegisterPw] = useState("");
     const [confirmPw, setConfirmPw] = useState("");
@@ -34,7 +35,7 @@ export default function LoginTemplate(){
         else
         {
             e.preventDefault();
-            axios.post("api/users/login", { username: loginEmail, password: loginPw })
+            axios.post("http://localhost:5000/api/users/login", { email: loginEmail, password: loginPw })
                 .then(res => { console.log(res) })
                 .catch(error => { console.log(error) });
             setLoginEmail("");
@@ -64,12 +65,14 @@ export default function LoginTemplate(){
             setRegisterValidated(true);
         }
         else{
-            axios.post("api/users/register", { username: registerUsername, email: registerEmail, password: loginPw })
+            e.preventDefault();
+            axios.post("http://localhost:5000/api/users/register", { email: registerEmail, name: registerName, username: registerUsername, password: registerPw, confirmPassword: confirmPw })
                 .then(res => { console.log(res) })
                 .catch(error => { console.log(error) });
             setRegisterEmail("");
-            setRegisterPw("");
+            setRegisterName("");
             setRegisterUsername("");
+            setRegisterPw("");
             setConfirmPw("");
         }
     }
@@ -104,6 +107,9 @@ export default function LoginTemplate(){
             break;
             case "confirmPw":
                 setConfirmPw(value);
+            break;
+            case "registerName":
+                setRegisterName(value);
             break;
             default:
             break;
@@ -166,6 +172,20 @@ export default function LoginTemplate(){
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     Please enter a valid email.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control 
+                                    id="registerName"
+                                    name="registerName"
+                                    onChange={handleChange} 
+                                    type="text" 
+                                    placeholder="Enter name"
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Username must be at least 5 characters.
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group>
