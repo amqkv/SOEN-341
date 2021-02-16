@@ -65,7 +65,8 @@ router.post("/login", (req,res) => {
     //Login validation
     if(!isValid) {
         console.log("not valid")
-        return res.status(400).json(errors);
+        console.log(errors)
+        return res.status(401).json({message: "Invalid login credentials"});
     }
 
     const email = req.body.email;
@@ -76,7 +77,7 @@ router.post("/login", (req,res) => {
         //Check if the user exists
         if(!user) {
             console.log("user doesn't exist")
-            return res.status(404).json({ emailnotFound: "Incorrect email or password" });
+            return res.status(401).json({ emailnotFound: "Incorrect email or password" });
         }
         //Check if correct password
         bcrypt.compare(password, user.password).then(isMatch => {
@@ -107,7 +108,7 @@ router.post("/login", (req,res) => {
             }
             else {
                 console.log("login not gucci")
-                return res.status(400).json({ passwordincorrect: "Incorrect email or password" });
+                return res.status(401).json({ passwordincorrect: "Incorrect email or password" });
             }
         });
     });
