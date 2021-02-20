@@ -3,22 +3,49 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const passport = require("passport");
-
-const users = require("./routes/api/users");
 const cors = require('cors');
 
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+
+const passport = require("passport");
+const users = require("./routes/api/users");
+
 const app = express();
+
+// For the sessions
+app.use(
+  session({
+    key: "userId",
+    secret: "SOEN341MemeSpaceProject",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 1000*60*60,    // Set 1h for session timeout
+      secure: false
+    },
+  })
+);
+
+// Cors to allow cross-origin requests
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
+app.use(cookieParser());
 
 // Bodyparser middleware
 app.use(
   bodyParser.urlencoded({
-    extended: false
+    extended: true
   })
 );
-
 app.use(bodyParser.json());
+
+
 
 // DB Config
 const db = require("./config/keys").mongoURI;
@@ -31,14 +58,6 @@ mongoose
   )
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));
-
-// Allowing CORS
-app.use(function(req, res, next){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-app.use(cors());
 
 //Passport Middleware
 app.use(passport.initialize());

@@ -11,6 +11,7 @@ const validateLoginInput = require("../../validation/login");
 
 //Load User model
 const User = require("../../models/User");
+const { Session } = require("express-session");
 
 //POST for register
 router.post("/register", (req, res) => {
@@ -34,6 +35,7 @@ router.post("/register", (req, res) => {
         //If not existing then create new user
         else {
             const newUser = new User({
+                username: req.body.username,
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password
@@ -53,6 +55,8 @@ router.post("/register", (req, res) => {
         }
     });
 });
+
+
 
 //POST for login
 router.post("/login", (req,res) => {
@@ -77,12 +81,16 @@ router.post("/login", (req,res) => {
         //Check if the user exists
         if(!user) {
             console.log("user doesn't exist")
-            return res.status(401).json({ emailnotFound: "Incorrect email or password" });
+            return res.send({ error: "User doesn't exist" });
         }
+        console.log("user: " + user);
         //Check if correct password
         bcrypt.compare(password, user.password).then(isMatch => {
             if(isMatch) {
                 //User matched
+                req.session.user = user;
+                console.log("req session user: " + req.session.user);
+                req.session.save();
                 //JWT Payload
                 const payload = {
                     id: user.id,
@@ -104,14 +112,26 @@ router.post("/login", (req,res) => {
                     }
                 );
                 console.log("login gucci")
-                return res.status(200).json({ response: "received" });
+                return res.status(200).json({ user });
             }
             else {
                 console.log("login not gucci")
-                return res.status(401).json({ passwordincorrect: "Incorrect email or password" });
+                return res.send({ error: "Incorrect email/password combination" });
             }
         });
     });
+});
+
+// GET for login
+router.get("/login", (req,res) =>{
+    console.log("login get")
+    console.log(req.session.user)
+    if(req.session.user){
+        console.log("get req.session.user: " + req.session.user)
+        res.send({ loggedIn: true, user: req.session.user })
+    } else {
+        res.send({ loggedIn: false })
+    }
 });
 
 module.exports = router;
