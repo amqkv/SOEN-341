@@ -6,27 +6,11 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
 
 const passport = require("passport");
 const users = require("./routes/api/users");
 
 const app = express();
-
-// For the sessions
-app.use(
-  session({
-    key: "userId",
-    secret: "SOEN341MemeSpaceProject",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      expires: 1000*60*60,    // Set 1h for session timeout
-      secure: false
-    },
-  })
-);
 
 // Cors to allow cross-origin requests
 app.use(cors({
@@ -34,8 +18,6 @@ app.use(cors({
   methods: ["GET", "POST"],
   credentials: true
 }));
-
-app.use(cookieParser());
 
 // Bodyparser middleware
 app.use(

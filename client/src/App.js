@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import axios from 'axios';
 
 import LoginTemplate from './Components/Templates/LoginTemplate';
 import ProfileTemplate from './Components/Templates/ProfileTemplate';
@@ -14,17 +13,20 @@ import './App.css';
 
 
 function App() {
+  const [currentUser, setCurrentUser] = useState();
 
+  function handleUser(user){
+    setCurrentUser(user);
+  }
 
   return (
       <Router>
       <div className="App">
-        <Route exact path="/" component={LoginTemplate} />
-        <Route exact path="/login" >
-          <LoginTemplate />
+        <Route exact path={["/", "/login", "/login#redirect"]} >
+          <LoginTemplate handleUser={handleUser} currentUser={currentUser} />
         </Route>
         <Route path="/profile">
-          <ProfileTemplate/>
+          <ProfileTemplate handleUser={handleUser} currentUser={currentUser} />
         </Route>
       </div>
       </Router>

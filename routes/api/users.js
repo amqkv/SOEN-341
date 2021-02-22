@@ -11,7 +11,6 @@ const validateLoginInput = require("../../validation/login");
 
 //Load User model
 const User = require("../../models/User");
-const { Session } = require("express-session");
 
 //POST for register
 router.post("/register", (req, res) => {
@@ -81,16 +80,13 @@ router.post("/login", (req,res) => {
         //Check if the user exists
         if(!user) {
             console.log("user doesn't exist")
-            return res.send({ error: "User doesn't exist" });
+            return res.send({ error: "This email does not match any account" });
         }
-        console.log("user: " + user);
+        // console.log("user: " + user);
         //Check if correct password
         bcrypt.compare(password, user.password).then(isMatch => {
             if(isMatch) {
                 //User matched
-                req.session.user = user;
-                console.log("req session user: " + req.session.user);
-                req.session.save();
                 //JWT Payload
                 const payload = {
                     id: user.id,
@@ -120,18 +116,6 @@ router.post("/login", (req,res) => {
             }
         });
     });
-});
-
-// GET for login
-router.get("/login", (req,res) =>{
-    console.log("login get")
-    console.log(req.session.user)
-    if(req.session.user){
-        console.log("get req.session.user: " + req.session.user)
-        res.send({ loggedIn: true, user: req.session.user })
-    } else {
-        res.send({ loggedIn: false })
-    }
 });
 
 module.exports = router;

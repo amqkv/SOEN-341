@@ -21,30 +21,23 @@ export default function LoginTemplate(props){
     const [confirmPw, setConfirmPw] = useState("");
     const [registerValidated, setRegisterValidated] = useState(false);
 
-    const [loginStatus,setLoginStatus] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
     axios.defaults.withCredentials = true;
 
-    // Checking the backend to see if there's a session open
     useEffect(() => {
-        axios.get("http://localhost:5000/api/users/login")
-        .then(res => {
-            console.log("getting login status")
-            console.log(res)
-            // If there is a session open, set the login status to the user's username and redirect to user's profile
-            if(res.data.loggedIn === true){
-                setLoginStatus(res.data.user.username);
-                window.location = "/profile/" + res.data.user.username;
-            } else {
-                setLoginStatus("");
-            }
-          })
+        if(localStorage.getItem("user")){
+            window.location = "/profile/" + JSON.parse(localStorage.getItem("user")).username;
+
+        }
+        if(window.location.hash === "#redirect")
+            setErrorMessage("You need log in to view that page!");
     }, [])
 
     // Login form validation
     function handleLogin(e){
         let pwIsInvalid = loginPw.length < 8;
+
         // If the email or password entered are not valid then the request will not be sent to backend
         if(loginEmail.length === 0 || pwIsInvalid){
             e.preventDefault();
@@ -62,11 +55,13 @@ export default function LoginTemplate(props){
                     console.log("login response")
                     console.log(res) 
                     if(res.data.error){
-                        setErrorMessage("Incorrect email/password combination!");
+                        setErrorMessage(res.data.error);
                     }
                     else{
-                        window.location="/profile/" + res.data.user.username;
                         setErrorMessage("");
+                        props.handleUser(res.data.user);
+                        localStorage.setItem("user", JSON.stringify(res.data.user));
+                        window.location = "/profile/" + res.data.user.username;
                     }
                 })
                 .catch(error => { console.log(error) });
@@ -115,7 +110,7 @@ export default function LoginTemplate(props){
     function handleChange(e){
         const { name, value } = e.target;
 
-        let pwIsInvalid = loginPw.length < 8 || loginPw.length > 16;
+        let pwIsInvalid = loginPw.length < 8;
 
         switch(name){
             case "loginEmail":
