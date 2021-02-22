@@ -26,11 +26,16 @@ router.post("/register", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    //Check if user already exists
-    User.findOne({ email: req.body.email }).then(user => {
-        if(user) {
-            return res.status(400).json({email:"Email already used"});
+    //Check if email or username already exists
+    User.findOne({$or: [{ email: req.body.email }, { username: req.body.username }]}).then(user => {
+        if(user){
+            if(user.email == req.body.email) {
+                return res.send({ error: "An account with that email already exists" });
+            } else if (user.username === req.body.username){
+                return res.send({ error: "That username has already been used" })
+            }
         }
+
         //If not existing then create new user
         else {
             const newUser = new User({
@@ -48,9 +53,11 @@ router.post("/register", (req, res) => {
                     newUser
                         .save()
                         .then(user => res.json(user))
-                        .catch(err => console.log(err));
+                        .catch(err => {
+                            console.log(err)
+                        });
                 });
-            });              
+            });
         }
     });
 });
@@ -82,7 +89,6 @@ router.post("/login", (req,res) => {
             console.log("user doesn't exist")
             return res.send({ error: "This email does not match any account" });
         }
-        // console.log("user: " + user);
         //Check if correct password
         bcrypt.compare(password, user.password).then(isMatch => {
             if(isMatch) {

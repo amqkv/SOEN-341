@@ -10,6 +10,8 @@ import './Templates.css';
 
 export default function LoginTemplate(props){
 
+    axios.defaults.withCredentials = true;
+
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPw, setLoginPw] = useState("");
     const [loginValidated, setLoginValidated] = useState(false);
@@ -22,14 +24,18 @@ export default function LoginTemplate(props){
     const [registerValidated, setRegisterValidated] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [currentTab, setCurrentTab] = useState("login");
 
-    axios.defaults.withCredentials = true;
 
+    // This will be called on the first render
     useEffect(() => {
+        // Check if the user is already logged in
+        // If yes, redirect to his/her profile
         if(localStorage.getItem("user")){
             window.location = "/profile/" + JSON.parse(localStorage.getItem("user")).username;
-
         }
+        // Display the error message if the user was trying to access a page without logging in
         if(window.location.hash === "#redirect")
             setErrorMessage("You need log in to view that page!");
     }, [])
@@ -58,6 +64,8 @@ export default function LoginTemplate(props){
                         setErrorMessage(res.data.error);
                     }
                     else{
+                        // Clear the input fields + set the state to the current user + redirect to user's profile
+                        document.getElementById("login_form").reset();
                         setErrorMessage("");
                         props.handleUser(res.data.user);
                         localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -95,14 +103,24 @@ export default function LoginTemplate(props){
             axios.post("http://localhost:5000/api/users/register", { email: registerEmail, name: registerName, username: registerUsername, password: registerPw, confirmPassword: confirmPw })
                 .then(res => { 
                     console.log("register response")
-                    console.log(res); 
+                    console.log(res);
+                    if(res.data.error){
+                        // Display error message if there's an error
+                        setErrorMessage(res.data.error);
+                    } else {
+                        // Upon successful register, clear all input fields and slide to the login tab
+                        document.getElementById("register_form").reset();
+                        setSuccessMessage("Your account has been successfully created! Log in to commence your meme journey ;^)");
+                        setErrorMessage("");
+                        setRegisterEmail("");
+                        setRegisterName("");
+                        setRegisterUsername("");
+                        setRegisterPw("");
+                        setConfirmPw("");
+                        setCurrentTab("login");
+                    }
                 })
                 .catch(error => { console.log(error) });
-            setRegisterEmail("");
-            setRegisterName("");
-            setRegisterUsername("");
-            setRegisterPw("");
-            setConfirmPw("");
         }
     }
 
@@ -145,15 +163,21 @@ export default function LoginTemplate(props){
         }
     }
 
+    // Function to handle the sliding of the tabs
+    function handleTabSelect(tab){
+        setCurrentTab(tab);
+    }
+
     return(
         <div id="Login_Template">
             {/* Welcome message */}
             <div id="login_register_header_msg">Sign in (or register!) to post those <img id="pepe_okei_sighn" alt="Pepe Okey Sighn" src="https://emoji.gg/assets/emoji/2676_Pepe_Okei_Sighn.png" height="40px"/> mémés</div>
-            
-            {/* Tabs containing the login & register forms */}
             <div id="login_register_form_container">
+                {/* Error/success messages */}
                 {errorMessage === "" ? <></> : <Alert severity="error">{errorMessage}</Alert>}
-                <Tabs defaultActiveKey="login" id="login_register_tabs">
+                {successMessage === "" ? <></> : <Alert severity="success">{successMessage}</Alert>}
+                {/* Tabs containing the login & register forms */}
+                <Tabs  activeKey={currentTab} id="login_register_tabs" onSelect={handleTabSelect}>
                     <Tab eventKey="login" title="Log in">
                         {/* Login form */}
                         <Form id="login_form" noValidate validated={loginValidated}>

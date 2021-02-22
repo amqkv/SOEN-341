@@ -7,10 +7,6 @@ import ProfileTemplate from './Components/Templates/ProfileTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-// const loginStatus = "";
-
-
-
 
 function App() {
   const [currentUser, setCurrentUser] = useState();
