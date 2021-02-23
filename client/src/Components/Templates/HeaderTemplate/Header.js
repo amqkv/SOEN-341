@@ -8,6 +8,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import {AddPhotoDialog} from "./AddPictureDialog/AddPictureDialog";
+
+
 const useStyles = makeStyles((theme) => ({
     toolbar: {
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -25,9 +29,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 export default function Header(props) {
     const classes = useStyles();
     const { sections, title } = props;
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose= (value) => {
+        setOpen(false);
+    }
 
     return (
         <React.Fragment>
@@ -46,6 +61,10 @@ export default function Header(props) {
                 <IconButton>
                     <SearchIcon />
                 </IconButton>
+                <IconButton onClick={handleClickOpen}>
+                    <AddAPhotoIcon />
+                </IconButton>
+                <AddPhotoDialog onClose={handleClose} open={open} />
                 <Button variant="outlined" size="small" onClick={passByGo}>
                     Login
                 </Button>

@@ -5,11 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import Header from './Header';
+import Header from './HeaderTemplate/Header';
 import Main from './Main';
-import Footer from './Footer';
+import Footer from './FooterTemplate/Footer';
 
-import Post from './PostTemplate';
+import Post from './PostsTemplate/PostTemplate';
 //Hard coded test images
 //TODO link image fetch to db
 import pepega from '../../Images/Pepega.png';

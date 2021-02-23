@@ -1,0 +1,10 @@
+.dialog {
+    display: flex;
+    min-width: 20%;
+    min-height: 20%;
+    margin: auto;
+}
+
+.textArea {
+    padding: 5px 5px 5px 5px;
+}

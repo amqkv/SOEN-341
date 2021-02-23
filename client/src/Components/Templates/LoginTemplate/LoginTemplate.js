@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
-import './Templates.css';
+import '../Templates.css';
 
 export default function LoginTemplate(){
     const [loginEmail, setLoginEmail] = useState("");

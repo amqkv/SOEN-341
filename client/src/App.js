@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import LoginTemplate from './Components/Templates/LoginTemplate';
+import LoginTemplate from './Components/Templates/LoginTemplate/LoginTemplate';
 import HomePage from './Components/Templates/HomePage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Route exact path="/" component={LoginTemplate} />
       <Route exact path="/login" component={LoginTemplate} />
-      <Route exact parth="/Home" component={HomePage} />
+      <Route exact path="/Home" component={HomePage} />
     </div>
     </Router>
 
