@@ -25,7 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
-.eslintcache
-/client/.eslintcache
+
 
 # DON'T IGNORE package-lock.json
