@@ -1,21 +1,24 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const PostSchema = mongoose.Schema({
-    user_uid: {
+//Create schema of user
+const PostSchema = new Schema({
+    ownerID: {
         type: String,
         required: true
     },
-    pic_s3_uid: String,
-    pic_name: {
+    image: {
         type: String,
         required: true
     },
-    pic_extension: {
+    description: {
         type: String,
         required: true
     },
-    title: String,
-    caption: String
-}, {timestamps : true});
+    date: {
+        type: Date,
+        default: Date.now
+    },
+});
 
-module.exports = mongoose.model('Post',PostSchema);
+module.exports = Post = mongoose.model("posts", PostSchema);

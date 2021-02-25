@@ -14,7 +14,7 @@ require('dotenv/config');
 const passport = require("passport");
 
 const users = require("./routes/api/users");
-const cors = require('cors');
+const posts = require("./routes/api/posts");
 
 const app = express();
 
@@ -71,23 +71,9 @@ require("./config/passport")(passport);
 
 //Routes
 app.use("/api/users", users);
-app.get("/", function (req, res){
-  console.log("home page");
-  return res.send("home page");
-})
+app.use("/api/posts", posts);
 
-app.post('/upload', upload.single('post_picture'), (req,res) => {
-  console.log(req.body)
-  return res.json({status: 'OK '})
-});
-
-// app.post("/login", function(req, res){
-//   console.log("login in server");
-//   return res.status(200).json({ response: "received login in server.js" });
-// })
-
-
-const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log("\nServer up and running on port " + port + "!!"));
 
