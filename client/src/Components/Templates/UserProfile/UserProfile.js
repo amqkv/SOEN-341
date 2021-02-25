@@ -81,32 +81,32 @@ const posts = [post1];
         {
             img: meme_man,
             title: 'meme man',
-            author: user.username
+            author: user ? user.username : "",
         },
         {
             img: harold,
             title: 'harold',
-            author: user.username
+            author: user ? user.username : "",
         },
         {
             img: pikachu,
             title: 'shocked pikachu',
-            author: user.username
+            author: user ? user.username : "",
         },
         {
             img: pepega,
             title: 'pepega',
-            author: user.username
+            author: user ? user.username : "",
         },
         {
             img: harold,
             title: 'harold',
-            author: user.username
+            author: user ? user.username : "",
         },
         {
             img: pikachu,
             title: 'shocked pikachu',
-            author: user.username
+            author: user ? user.username : "",
         },
     
     ];
