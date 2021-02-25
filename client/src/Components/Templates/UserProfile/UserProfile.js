@@ -1,6 +1,6 @@
 //https://material-ui.com/getting-started/templates/blog/#
 
-import React from 'react';
+import { React, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +23,8 @@ import forever_alone from '../../../Images/forever_alone.jpg';
 import meme_man from '../../../Images/meme_man.jpg';
 import harold from '../../../Images/harold.jpg';
 import pikachu from '../../../Images/shocked pikachu.png';
+import logo from "../../../Images/Logo.png";
+
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
@@ -68,86 +70,105 @@ const post1 =
         text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     />
 
-const tileData = [
-    {
-        img: meme_man,
-        title: 'meme man',
-        author: "userProfileOwner"
-    },
-    {
-        img: harold,
-        title: 'harold',
-        author: "userProfileOwner"
-    },
-    {
-        img: pikachu,
-        title: 'shocked pikachu',
-        author: "userProfileOwner"
-    },
-    {
-        img: pepega,
-        title: 'pepega',
-        author: "userProfileOwner"
-    },
-    {
-        img: harold,
-        title: 'harold',
-        author: "userProfileOwner"
-    },
-    {
-        img: pikachu,
-        title: 'shocked pikachu',
-        author: "userProfileOwner"
-    },
 
-];
 
 const posts = [post1];
+    //Gets the user profile to display it on top of page
+    const user = JSON.parse(localStorage.getItem("user"));
 
-//Gets the user profile to display it on top of page
-const user = { name: "userProfileNameHere" }
+    // User's past posts 
+    const tileData = [
+        {
+            img: meme_man,
+            title: 'meme man',
+            author: user.username
+        },
+        {
+            img: harold,
+            title: 'harold',
+            author: user.username
+        },
+        {
+            img: pikachu,
+            title: 'shocked pikachu',
+            author: user.username
+        },
+        {
+            img: pepega,
+            title: 'pepega',
+            author: user.username
+        },
+        {
+            img: harold,
+            title: 'harold',
+            author: user.username
+        },
+        {
+            img: pikachu,
+            title: 'shocked pikachu',
+            author: user.username
+        },
+    
+    ];
 
-//const profile = getFromBackend();
-const profile = {
-    posts: 7,
-    followers: 0,
-    following: 9687
-}
+    //const profile = getFromBackend();
+    const profile = {
+        posts: tileData.length,
+        followers: 51289,
+        following: 9687
+    }
 
-export default function UserProfile() {
+
+
+
+export default function UserProfile(props) {
+
+
+
+    // Checking the backend to see if the user is logged in
+    useEffect(() => {
+        if(localStorage.getItem("user") === null)
+            window.location = "/login#redirect";
+    }, [])
+
     const classes = useStyles();
 
+        // Checking the backend to see if the user is logged in
+    useEffect(() => {
+        if(localStorage.getItem("user") === null)
+            window.location = "/login#redirect";
+    }, [])
+
     return (
-        <React.Fragment>
+        <div>
             <CssBaseline />
             <Container maxWidth="lg">
-                <Header title="MemeSpace" sections={sections} />
+                <Header title="MemeSpace" sections={sections} handleUser={props.handleUser} currentUser={props.currentUser} />
                 <feed>
-                    <h2>{user.name}</h2>
-                    <Grid container className={classes.mainGrid}>
-                        <PostFeed title="Profile Page" posts={posts} />
-                    </Grid>
+                    <a href="/Home">
+                        <img src={logo} alt={props}/>
+                    </a>
+                    <h2>{user.username}</h2>
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
                     </div>
+                    <Container>
+                        <ContainedButtons />
+                    </Container>
+                    <Grid container className={classes.mainGrid}>
+                        <PostFeed title="Profile Page" posts={posts} />
+                    </Grid>
+
                 </feed>
             </Container>
             <Container>
-
-            </Container>
-
-            <Container>
-                <ContainedButtons />
-            </Container>
-
-            <Container>
                 <br></br>
-                <h3>Browse olders memes from 'this user'</h3>
+                <h3>Browse olders memes from {user.username}</h3>
 
                 <div className={classes.root}>
                     <GridList cellHeight={180} className={classes.gridList}>
                         <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-                            <ListSubheader component="div">'This user' past memes</ListSubheader>
+                            {/* <ListSubheader component="div">{user.username + "'s"} past memes</ListSubheader> */}
                         </GridListTile>
                         {tileData.map((tile) => (
                             <GridListTile key={tile.img}>
@@ -168,6 +189,6 @@ export default function UserProfile() {
             </Container>
 
             <Footer title="Footer" description="This is a footer" />
-        </React.Fragment>
+        </div>
     );
 }

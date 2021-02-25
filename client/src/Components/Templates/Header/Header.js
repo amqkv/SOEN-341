@@ -7,8 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import Pepette from "../../../Images/sad_pepette.jpg";
 
-import logo from '../../../Images/Logo.png';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -30,6 +30,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
     const classes = useStyles();
     const { sections, title } = props;
+    const user = JSON.parse(localStorage.getItem("user"));
+    function login_logout(){
+        if(localStorage.getItem("user") != null){
+            props.handleUser(null);
+            localStorage.clear();
+        }
+        window.location = "/login";
+    }
 
     return (
         <React.Fragment>
@@ -43,14 +51,17 @@ export default function Header(props) {
                     noWrap
                     className={classes.toolbarTitle}
                 >
-                    {title}
+                <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}>{title}</a>
                 </Typography>
                 <IconButton>
                     <SearchIcon />
                 </IconButton>
-                <Button variant="outlined" size="small" onClick={passByGo}>
-                    Login
+                <Button variant="outlined" size="small" onClick={login_logout}>
+                    {localStorage.getItem("user") === null ? "Login" : "Logout"}
                 </Button>
+                <a href={"/UserProfile/" + user.username}>
+                    <img alt="header_profile_picture" src={Pepette} width="35px" height="35px" style={{ borderRadius: "50%", margin: "5px" }} />
+                </a>
             </Toolbar>
             <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
                 {sections.map((section) => (
@@ -78,6 +89,5 @@ Header.propTypes = {
 function yeetToGIT(){
     window.open('https://github.com/amqkv/SOEN-341', "_blank");
 }
-function passByGo(){
-    window.location.href='/login';
-}
+
+
