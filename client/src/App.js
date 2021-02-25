@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import {LoginTemplate, HomePage, ProfileTemplate} from './Components/index';
+import {LoginTemplate, HomePage, ProfileTemplate, UserProfile} from './Components/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -22,6 +22,7 @@ function App() {
           <ProfileTemplate handleUser={handleUser} currentUser={currentUser} />
         </Route>
         <Route exact path="/Home" component={HomePage} />
+        <Route exact path="/UserProfile" component={UserProfile} />
       </div>
       </Router>
   );
