@@ -48,17 +48,27 @@ export default function Post(props) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Like
-                </Button>
-                <Button size="small" color="primary">
-                    Follow
-                </Button>
-                <Button size="small" color="primary">
-                    Share
-                </Button>
-            </CardActions>
+
+            {
+                props.showActions ? (
+                    <CardActions>
+                        <Button size="small" color="primary">
+                            Like
+                        </Button>
+                        <Button size="small" color="primary">
+                            Follow
+                        </Button>
+                        <Button size="small" color="primary">
+                            Share
+                        </Button>
+                    </CardActions>
+                ) : null
+            }
+            
         </Card>
     );
+}
+
+Post.defaultProps = {
+    showActions : true
 }
