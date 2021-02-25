@@ -9,13 +9,14 @@ const Post = require("../../models/Post");
 //Post for addPost
 router.post("/addPost", (req, res) => {
 
-    //Form validation
-    const { errors, isValid } = validateAddPostInput(req.body);
+    // Has Issues
+    // //Form validation
+    // const { errors, isValid } = validateAddPostInput(req.body);
 
-    //Check validation
-    if (!isValid) {
-        return res.status(400).json(errors);
-    }
+    // //Check validation
+    // if (!isValid) {
+    //     return res.status(400).json(errors);
+    // }
 
     //Add Post
     const newPost = new Post({
@@ -28,7 +29,6 @@ router.post("/addPost", (req, res) => {
     //     .save()
     //     .then(post => res.json(post))
 
-    console.log("YAhoo!")
 });
 
 
