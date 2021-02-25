@@ -16,23 +16,30 @@ const User = require("../../models/User");
 router.post("/register", (req, res) => {
 
     console.log("register")
-
+    console.log(req.body);
     //Form validation
     const{ errors, isValid } = validateRegisterInput(req.body);
 
     //Check validation
     if(!isValid) {
+        console.log("not valid")
         return res.status(400).json(errors);
     }
 
-    //Check if user already exists
-    User.findOne({ email: req.body.email }).then(user => {
-        if(user) {
-            return res.status(400).json({email:"Email already used"});
+    //Check if email or username already exists
+    User.findOne({$or: [{ email: req.body.email }, { username: req.body.username }]}).then(user => {
+        if(user){
+            if(user.email == req.body.email) {
+                return res.send({ error: "An account with that email already exists" });
+            } else if (user.username === req.body.username){
+                return res.send({ error: "That username has already been used" })
+            }
         }
+
         //If not existing then create new user
         else {
             const newUser = new User({
+                username: req.body.username,
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password
@@ -46,21 +53,30 @@ router.post("/register", (req, res) => {
                     newUser
                         .save()
                         .then(user => res.json(user))
-                        .catch(err => console.log(err));
+                        .catch(err => {
+                            console.log(err)
+                        });
                 });
-            });              
+            });
         }
     });
 });
+
+
 
 //POST for login
 router.post("/login", (req,res) => {
 
     console.log("login");
-    
+    console.log(req.body);
+    // Form validation
+    const{ errors, isValid } = validateLoginInput(req.body);
+
     //Login validation
     if(!isValid) {
-        return res.status(400).json(errors);
+        console.log("not valid")
+        console.log(errors)
+        return res.status(401).json({message: "Invalid login credentials"});
     }
 
     const email = req.body.email;
@@ -70,7 +86,8 @@ router.post("/login", (req,res) => {
     User.findOne({ email }).then(user => {
         //Check if the user exists
         if(!user) {
-            return res.status(404).json({ emailnotFound: "Incorrect email or password" });
+            console.log("user doesn't exist")
+            return res.send({ error: "This email does not match any account" });
         }
         //Check if correct password
         bcrypt.compare(password, user.password).then(isMatch => {
@@ -96,10 +113,12 @@ router.post("/login", (req,res) => {
                         });
                     }
                 );
-                return res.status(200).json({ response: "received" });
+                console.log("login gucci")
+                return res.status(200).json({ user });
             }
             else {
-                return res.status(400).json({ passwordincorrect: "Incorrect email or password" });
+                console.log("login not gucci")
+                return res.send({ error: "Incorrect email/password combination" });
             }
         });
     });
