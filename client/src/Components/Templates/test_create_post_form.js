@@ -15,9 +15,10 @@ export default function CreatePost(){
     function handleSubmit(event) {
         event.preventDefault();
         console.log(fileInput)
-        // axios.post("api/users/login", { username: loginEmail, password: loginPw })
-        // .then(res => { console.log(res) })
-        // .catch(error => { console.log(error) });
+
+        axios.post("api/posts/addPost", { ownerID: 123124, description:caption, image: "ehlp"})
+        .then(res => { console.log(res) })
+        .catch(error => { console.log(error.response) });
     }
 
     return(

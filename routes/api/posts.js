@@ -4,12 +4,7 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
 
-//Load input validation for register and login
-const validateAddPostInput = require("../../validation/addPost");
-
-//Load Post model
 const Post = require("../../models/Post");
-const { post } = require("./users");
 
 //Post for addPost
 router.post("/addPost", (req, res) => {
@@ -29,9 +24,13 @@ router.post("/addPost", (req, res) => {
         description: req.body.description
     });
     
-    newPost
-        .save()
-        .then(post => res.json(post))
+    // newPost
+    //     .save()
+    //     .then(post => res.json(post))
+
+    console.log("YAhoo!")
 });
+
+
 
 module.exports = router;

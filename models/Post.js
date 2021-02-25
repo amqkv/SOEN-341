@@ -11,6 +11,10 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
+    S3ref: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
