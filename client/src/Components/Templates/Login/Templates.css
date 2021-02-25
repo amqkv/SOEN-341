@@ -48,3 +48,8 @@
 .nav-tabs{
     margin-top: 0.5em;
 }
+#mainBox {
+    column-count: 3;
+    column-gap: 0px;
+    font-size: 18px;
+}
