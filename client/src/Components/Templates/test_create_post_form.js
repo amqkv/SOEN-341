@@ -1,3 +1,4 @@
+import FormData from 'form-data'
 import {React, useRef,useState} from 'react';
 import axios from 'axios';
 
@@ -16,20 +17,37 @@ export default function CreatePost(){
         event.preventDefault();
         console.log(fileInput)
 
-        axios.post("api/posts/addPost", { ownerID: 123124, description:caption, image: "ehlp"})
-        .then(res => { console.log(res) })
+        // Groom data obtained from front end
+
+        // TODO verify file is not empty, etc.
+
+        var data = new FormData();
+        data.append("ownerID",123124)
+        data.append("description",caption)
+        data.append("image",fileInput.current.files[0].name)
+        data.append('file', fileInput.current.files[0]);
+
+        // Send data to backend
+        axios.post("/api/posts/addPost", data, {
+          headers: {
+            'accept': 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+          }
+        }).then(res => { console.log(res) })
         .catch(error => { console.log(error.response) });
+ 
     }
 
     return(
         <form onSubmit={handleSubmit}>
         <label>
-          Name:
+          Description:
           <input type="text" value={caption} onChange={handleChange} />
         </label>
       <label>
         Upload file:
-        <input type="file" ref={fileInput} />
+        <input type="file" ref={fileInput} name="post_picture"/>
       </label>
       <br />
       <button type="submit">Submit</button>

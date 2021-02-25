@@ -11,7 +11,7 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
-    S3ref: {
+    S3Link: {
         type: String,
         required: true
     },
