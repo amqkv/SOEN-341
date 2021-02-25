@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import LoginTemplate from './Components/Templates/LoginTemplate';
+import ProfileTemplate from './Components/Templates/ProfileTemplate';
+
+import HomePage from './Components/Templates/HomePage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+
 function App() {
+  const [currentUser, setCurrentUser] = useState();
+
+  function handleUser(user){
+    setCurrentUser(user);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+      <div className="App">
+        <Route exact path={["/", "/login", "/login#redirect"]} >
+          <LoginTemplate handleUser={handleUser} currentUser={currentUser} />
+        </Route>
+        <Route path="/profile">
+          <ProfileTemplate handleUser={handleUser} currentUser={currentUser} />
+        </Route>
+        <Route exact path="/Home" component={HomePage} />
+      </div>
+      </Router>
   );
 }
 
