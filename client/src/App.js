@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-
-import LoginTemplate from './Components/Templates/LoginTemplate';
-import ProfileTemplate from './Components/Templates/ProfileTemplate';
-
-import HomePage from './Components/Templates/HomePage';
+import {LoginTemplate, HomePage, ProfileTemplate} from './Components/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
