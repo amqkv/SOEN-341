@@ -44,3 +44,12 @@
 .is-invalid:focus{
     box-shadow: 0 0 0 0.2rem rgb(220 53 69 / 25%) !important
 }
+
+.nav-tabs{
+    margin-top: 0.5em;
+}
+#mainBox {
+    column-count: 3;
+    column-gap: 0px;
+    font-size: 18px;
+}

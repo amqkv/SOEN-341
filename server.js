@@ -3,25 +3,31 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
+
 const bodyParser = require("body-parser");
 const Post = require('./models/Post');
 require('dotenv/config');
 
-
 const passport = require("passport");
-
 const users = require("./routes/api/users");
 const posts = require("./routes/api/posts");
 
 const app = express();
 
+// Cors to allow cross-origin requests
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 // Bodyparser middleware
 app.use(
   bodyParser.urlencoded({
-    extended: false
+    extended: true
   })
 );
-
 app.use(bodyParser.json());
 
 // Connect to MongoDB
@@ -43,7 +49,12 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/posts", posts);
 
-const port = process.env.PORT || 3000;
+app.get("/", function (req, res){
+  console.log("home page");
+  return res.send("home page");
+})
+
+const port = 5000;
 
 app.listen(port, () => console.log("\nServer up and running on port " + port + "!!"));
 

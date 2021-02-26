@@ -30,7 +30,7 @@ MemeSpace is an application designed and implemented as part of the SOEN 341 cou
 * The FrontEnd server runs with React.js, a node js framework.
 * To run de code locally enter this command in the command line
 ```
-cd MemeSpace
+cd client
 npm start
 ```
 
@@ -39,8 +39,7 @@ npm start
 * The backend server runs with express.js, a node js framework.
 * To run de code locally enter this command in the command line
 ```
-cd MemeServer
-npm start
+nodemon run server
 ```
 
 * Please note that it is necessary to properly configure the .env file
