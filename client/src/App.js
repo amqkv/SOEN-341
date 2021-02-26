@@ -19,12 +19,11 @@ function App() {
         <Route exact path={["/", "/login", "/login#redirect"]} >
           <LoginTemplate handleUser={handleUser} currentUser={currentUser} />
         </Route>
-        <Route path="/profile">
-          <ProfileTemplate handleUser={handleUser} currentUser={currentUser} />
-        </Route>
         <Route exact path="/Home" component={HomePage} />
-        <Route exact path="/UserProfile" component={UserProfile} />
         <Route exact path="/post" component={CreatePost}/>
+        <Route path="/UserProfile">
+          <UserProfile  handleUser={handleUser} currentUser={currentUser} />
+        </Route>
       </div>
       </Router>
   );
