@@ -2,7 +2,6 @@ const express = require("express");
 const pify = require('pify')
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys");
 const passport = require("passport");
 const aws = require('aws-sdk')
 const multerS3 = require('multer-s3');
