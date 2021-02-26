@@ -3,6 +3,9 @@
 # dependencies
 node_modules
 /node_modules
+/client/build
+.eslintcache
+client/.eslintcache
 /.pnp
 .pnp.js
 /client/node_modules
@@ -15,6 +18,7 @@ node_modules
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -26,8 +30,3 @@ yarn-error.log*
 
 .idea
 .eslintcache
-
-/client/.eslintcache
-
-# DON'T IGNORE package-lock.json
-

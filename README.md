@@ -42,6 +42,15 @@ npm start
 nodemon run server
 ```
 
+* Please note that it is necessary to properly configure the .env file
+* prior to running the server since all the access tokens and passwords
+* are located there. 
+* For security reasons the file cannot be part of the repository and 
+* thus will be distributed manually to select people upon request.
+* A sample fields of the .env file are shown in:
+```
+.env-mock
+```
 
 ## Pull Request Process
 Pull requests will have to be reviewed by minimum 3 other team members (excluding the requester) in order to be marged to main/production/master
