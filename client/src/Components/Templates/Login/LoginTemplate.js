@@ -33,7 +33,7 @@ export default function LoginTemplate(props){
         // Check if the user is already logged in
         // If yes, redirect to his/her profile
         if(localStorage.getItem("user")){
-            window.location = "/profile/" + JSON.parse(localStorage.getItem("user")).username;
+            window.location = "/UserProfile/" + JSON.parse(localStorage.getItem("user")).username;
         }
         // Display the error message if the user was trying to access a page without logging in
         if(window.location.hash === "#redirect")
@@ -69,7 +69,7 @@ export default function LoginTemplate(props){
                         setErrorMessage("");
                         props.handleUser(res.data.user);
                         localStorage.setItem("user", JSON.stringify(res.data.user));
-                        window.location = "/profile/" + res.data.user.username;
+                        window.location = "/UserProfile/" + res.data.user.username;
                     }
                 })
                 .catch(error => { console.log(error) });
