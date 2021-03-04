@@ -14,7 +14,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CardHeader from "@material-ui/core/CardHeader";
 
 export default function Post(props) {
-
+    console.log(props)
     return (
         <Card className="post_card">
             <CardHeader
@@ -37,6 +37,7 @@ export default function Post(props) {
                     alt="My brain during exams"
                     height="auto"
                     image={props.imagePath}
+                    src={`data:image/${props.fileEncoding};base64, ${props.base64img}`}
                     title="My brain during exams"
                 />
                 <CardContent>
