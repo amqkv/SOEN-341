@@ -11,9 +11,11 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import Button from 'react-bootstrap/Button'
+import axios from 'axios';
+
 
 import {Header, PostFeed, Footer, Post} from '../../index';
-import ContainedButtons from '../ContainedButtons';
 import ProfileStats from './ProfileStats';
 
 //Hard coded test images
@@ -123,8 +125,6 @@ const posts = [post1];
 
 export default function UserProfile(props) {
 
-
-
     // Checking the backend to see if the user is logged in
     useEffect(() => {
         if(localStorage.getItem("user") === null)
@@ -138,6 +138,15 @@ export default function UserProfile(props) {
         if(localStorage.getItem("user") === null)
             window.location = "/login#redirect";
     }, [])
+
+    function handleFollow(){
+        console.log("clicked follow btn")
+        axios.post("http://localhost:5000/api/follow/follow", {currentUsername: JSON.parse(localStorage.getItem("user")).username, usernameOfFollowed: window.location.href.split("/")[4]})
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(error => console.log(error));
+    }
 
     return (
         <div>
@@ -153,7 +162,7 @@ export default function UserProfile(props) {
                         <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
                     </div>
                     <Container>
-                        <ContainedButtons />
+                        <Button onClick={handleFollow} variant="info">Follow</Button>
                     </Container>
                     <Grid container className={classes.mainGrid}>
                         <PostFeed title="Profile Page" posts={posts} />
