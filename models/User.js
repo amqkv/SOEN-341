@@ -23,9 +23,13 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    follows: {
+    followers: {
         type: Array,
-        default: []
+        default: [],
+    },
+    following: {
+        type: Array,
+        default: [],
     }
 });
 
