@@ -133,15 +133,37 @@ export default function UserProfile(props) {
 
     const classes = useStyles();
 
-        // Checking the backend to see if the user is logged in
+    // Checking the backend to see if the user is logged in
     useEffect(() => {
         if(localStorage.getItem("user") === null)
             window.location = "/login#redirect";
     }, [])
 
+    const usernameS = {currentUsername: JSON.parse(localStorage.getItem("user")).username, visitedUsername: window.location.href.split("/")[4]};
+
+    //Check if user already follows the other
+    useEffect(() => {
+       axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
+           .then(res => {
+               console.log("check follow FE");
+               console.log(res.data)
+
+               if(res.data.followingList.includes(usernameS.visitedUsername)){
+                   //show unfollow
+               }
+               else{
+                   //show follow
+               }
+
+
+
+           })
+           .catch(error => console.log(error));
+    }, [])
+
     function handleFollow(){
         console.log("clicked follow btn")
-        axios.post("http://localhost:5000/api/follow/follow", {currentUsername: JSON.parse(localStorage.getItem("user")).username, usernameOfFollowed: window.location.href.split("/")[4]})
+        axios.post("http://localhost:5000/api/follow/follow", usernameS)
             .then(res => {
                 console.log(res.data)
             })
