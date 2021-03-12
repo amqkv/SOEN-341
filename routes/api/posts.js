@@ -18,7 +18,7 @@ const s3 = new aws.S3({ apiVersion: '2006-03-01',
                         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY });
 
-const upload = multer ({ storage: multerS3({ s3: s3, bucket: process.env.S3_URI }) }); //Fixed
+const upload = multer ({ storage: multerS3({ s3: s3, bucket: process.env.S3_BUCKET }) }); //Fixed
 
 const fetch_10_post_from_db = function(req,res){
     Post.find({}, function (err,posts) {

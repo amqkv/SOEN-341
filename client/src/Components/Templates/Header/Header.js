@@ -33,7 +33,7 @@ export default function Header(props) {
     const user = JSON.parse(localStorage.getItem("user"));
     function login_logout(){
         if(localStorage.getItem("user") != null){
-            props.handleUser(null);
+            // props.handleUser(null);
             localStorage.clear();
         }
         window.location = "/login";
@@ -59,9 +59,12 @@ export default function Header(props) {
                 <Button variant="outlined" size="small" onClick={login_logout}>
                     {localStorage.getItem("user") === null ? "Login" : "Logout"}
                 </Button>
-                <a href={"/UserProfile/" + user.username}>
-                    <img alt="header_profile_picture" src={Pepette} width="35px" height="35px" style={{ borderRadius: "50%", margin: "5px" }} />
-                </a>
+                {user ? 
+                    <a href={"/UserProfile/" + user.username}>
+                        <img alt="header_profile_picture" src={Pepette} width="35px" height="35px" style={{ borderRadius: "50%", margin: "5px" }} />
+                    </a>
+                    : null
+                }
             </Toolbar>
             <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
                 {sections.map((section) => (

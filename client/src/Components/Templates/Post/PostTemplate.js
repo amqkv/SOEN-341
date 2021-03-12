@@ -1,6 +1,7 @@
 //base template: https://material-ui.com/components/cards/
 
-import React from 'react';
+import { React, useState } from 'react';
+import { makeStyles } from "@material-ui/core/styles";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -12,8 +13,38 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CardHeader from "@material-ui/core/CardHeader";
+import Collapse from '@material-ui/core/Collapse';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import clsx from 'clsx';
+import Comments from "./Comments"
+import "./PostTemplate.scss";
+
+
 
 export default function Post(props) {
+    const [expanded, setExpanded] = useState(false);
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
+    const user = JSON.parse(localStorage.getItem("user"))
+
+
+    const useStyles = makeStyles((theme) => ({
+          expand: {
+            transform: 'rotate(0deg)',
+            marginLeft: 'auto',
+            transition: theme.transitions.create('transform', {
+              duration: theme.transitions.duration.shortest,
+            }),
+          },
+          expandOpen: {
+            transform: 'rotate(180deg)',
+          },
+      }));
+      
+      const classes = useStyles();
+
     console.log(props)
     return (
         <Card className="post_card">
@@ -52,17 +83,26 @@ export default function Post(props) {
 
             {
                 props.showActions ? (
+                    <>
                     <CardActions>
-                        <Button size="small" color="primary">
+                        <Button size="small" color="default">
                             Like
                         </Button>
-                        <Button size="small" color="primary">
-                            Follow
-                        </Button>
-                        <Button size="small" color="primary">
-                            Share
+                        <Button size="small" 
+                            color="default" 
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more">
+                            Comments
+                            <ExpandMoreIcon className={clsx(classes.expand, {[classes.expandOpen]: expanded})}/>
                         </Button>
                     </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                            <Comments />
+                        </CardContent>
+                    </Collapse>
+                    </>
                 ) : null
             }
             

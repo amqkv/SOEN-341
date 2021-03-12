@@ -148,7 +148,7 @@ export default function UserProfile(props) {
                     <a href="/Home">
                         <img src={logo} alt={props}/>
                     </a>
-                    <h2>{user.username}</h2>
+                    <h2>{window.location.href.split("/")[4]}</h2>
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
                     </div>
@@ -163,7 +163,7 @@ export default function UserProfile(props) {
             </Container>
             <Container>
                 <br></br>
-                <h3>Browse olders memes from {user.username}</h3>
+                <h3>Browse olders memes from {user ? user.username : ""}</h3>
 
                 <div className={classes.root}>
                     <GridList cellHeight={180} className={classes.gridList}>
