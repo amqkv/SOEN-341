@@ -1,18 +1,30 @@
 import FormData from 'form-data'
 import {React, useRef,useState} from 'react';
 import axios from 'axios';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import "./Form.scss";
 
-export default function CreatePost(){
+export default function CreatePost(props){
     const fileInput = useRef(null);
     const [caption,setInputValue] = useState("");
-    
+    const { onClose, selectedValue, open } = props;
+
+
+    // Function handling the closing of the dialog box (popup)
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+
     // Storing the values of the user input on change
     function handleChange(e){
         console.log(e)
         setInputValue(e.target.value)
     }
     
-    // Handling of submittion
+    // Handling of submition
     function handleSubmit(event) {
         event.preventDefault();
         console.log(fileInput)
@@ -36,21 +48,39 @@ export default function CreatePost(){
           }
         }).then(res => { console.log(res) })
         .catch(error => { console.log(error.response) });
- 
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+        <DialogTitle>Create a post</DialogTitle>
+          <Form id="create_post_form" onSubmit={handleSubmit}>
+            <Form.Group>
+              <Form.Label>Upload photo</Form.Label>
+              <Form.Control 
+                type="file"
+                ref={fileInput}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Caption</Form.Label>
+              <Form.Control
+                onChange={handleChange}
+                value={caption}
+                type="text"
+                placeholder="Write a caption..."
+              />
+            </Form.Group>
+          {/* <label>
+            Description:
+            <input type="text" value={caption} onChange={handleChange} />
+          </label>
         <label>
-          Description:
-          <input type="text" value={caption} onChange={handleChange} />
-        </label>
-      <label>
-        Upload file:
-        <input type="file" ref={fileInput} name="post_picture"/>
-      </label>
-      <br />
-      <button type="submit">Submit</button>
-    </form>
+          Upload file:
+          <input type="file" ref={fileInput} name="post_picture"/>
+        </label> */}
+        <Button variant="info" type="submit" disabled={caption.length === 0 ? true : false}>Submit</Button>
+      </Form>
+      </Dialog>
+
     );
 }

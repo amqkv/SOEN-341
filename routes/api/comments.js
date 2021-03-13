@@ -6,20 +6,24 @@ require('dotenv/config');
 const FormData = require('form-data');
 
 const validateAddCommentInput = require("../../validation/addComment");
-
+const Comment = require("../../models/Comment");
 
 //POST for comments
 router.post("/comments", (req, res) => {
     try {
+        console.log(req.body)
+        Comment.find({}).sort({_id: -1}).limit(1).exec(function(err, comment){
+            console.log(comment)
+        })
         // Add Comment
-        const newComment = new Post({
-            postID: req.body.postID,
-            commentID: req.body.commentID,
-            author: req.body.author,
-            content: req.body.content
-        });
+        // const newComment = new Post({
+        //     postID: req.body.postID,
+        //     commentID: req.body.commentID,
+        //     author: req.body.author,
+        //     content: req.body.content
+        // });
     
-        newComment.save().then(comment => res.json(comment))
+        // newComment.save().then(comment => res.json(comment))
     
     } catch(err) {
         // An error occurred when uploading 

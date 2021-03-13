@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,7 +8,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Pepette from "../../../Images/sad_pepette.jpg";
-
+import {BiImageAdd} from "react-icons/bi";
+import CreatePost from "../test_create_post_form";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -25,12 +26,26 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
         flexShrink: 0,
     },
+    addImageBtn:{
+        padding: "3px",
+        height: "35px",
+        minWidth: "0px",
+        width: "35px"
+    },
+    biImageAdd:{
+        height: "27px",
+        width: "27px",
+        color:"rgba(0, 0, 0, 0.6)"
+    }
 }));
 
 export default function Header(props) {
     const classes = useStyles();
     const { sections, title } = props;
+    const [open, setOpen] = useState(false);
+
     const user = JSON.parse(localStorage.getItem("user"));
+    
     function login_logout(){
         if(localStorage.getItem("user") != null){
             // props.handleUser(null);
@@ -39,8 +54,14 @@ export default function Header(props) {
         window.location = "/login";
     }
 
+    function handleCreate(){
+        setOpen(!open);
+    }
+
+
     return (
-        <React.Fragment>
+        <div id="Header">
+            {open ? <CreatePost open={open} onClose={handleCreate}/> : null}
             <Toolbar className={classes.toolbar}>
                 <Button size="small" onClick={yeetToGIT}>The Github Repo</Button>
                 <Typography
@@ -65,6 +86,9 @@ export default function Header(props) {
                     </a>
                     : null
                 }
+                <Button className={classes.addImageBtn} onClick={handleCreate}>
+                    <BiImageAdd className={classes.biImageAdd}/>
+                </Button>
             </Toolbar>
             <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
                 {sections.map((section) => (
@@ -80,7 +104,7 @@ export default function Header(props) {
                     </Link>
                 ))}
             </Toolbar>
-        </React.Fragment>
+        </div>
     );
 }
 

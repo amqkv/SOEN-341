@@ -37,15 +37,25 @@ const sections = [
 
 //Combine this with backend DB
 // var posts = [];
+const comments = [
+    {postID: "60382688d9913406bdebb18b", commentID: 1, author: "pooja.god", content: "i cri", date: "30-02-1932"},
+    {postID: "60382688d9913406bdebb18b", commentID: 2, author: "sitetester", content: "testing", date: "12-01-3052"},
+    {postID: "60382688d9913406bdebb18b", commentID: 3, author: "demodemo", content: "pls", date: " 06-12-5123"},
+    {postID: "60382688d9913406bdebb18b", commentID: 4, author: "mouchou", content: "work", date: "30-02-632 BC"},
+    {postID: "60382688d9913406bdebb18b", commentID: 5, author: "asdasdasd", content: "thx", date: "31-05-2020"},
+]
 const post1 = <Post
+postID="60382688d9913406bdebb18b"
 author="Olivier"
 date="2021-02-12"
 title="Videotron"
 imagePath={videotron}
 text="Haha internet problems on quiz time goes brrrrr"
+comments={comments}
 />
 
 const post2 = <Post
+postID="602b2fc542b5d081b909c466"
 author="Olivier"
 date="2021-02-11"
 title="Pepega"
@@ -54,6 +64,7 @@ text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod te
 />
 
 const post3 = <Post
+postID="602b2f9242b5d081b909c465"
 author="Olivier"
 date="2021-02-11"
 title="Surprised Pikachu"
@@ -81,6 +92,7 @@ export default function HomePage(props) {
                         base64img={res.data['image']['file']}
                         fileEncoding={res.data['image']['encoding']}
                         text={ res.data['description']}
+                        postID={ res.data['postID'] }
                         />
 
             posts.push(temp)

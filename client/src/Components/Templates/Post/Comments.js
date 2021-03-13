@@ -2,32 +2,30 @@ import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import "./PostTemplate.scss";
 import Button from 'react-bootstrap/Button';
-
+import axios from "axios";
 
 
 export default function Comments(props){
     const [comment, setComment] = useState("");
 
     // Fetch the comments here
-    const comments=[
-        {postID: 1, commentID: 1, author: "pooja.god", content: "i cri", date: "30-02-1932"},
-        {postID: 1, commentID: 2, author: "sitetester", content: "testing", date: "12-01-3052"},
-        {postID: 1, commentID: 3, author: "demodemo", content: "pls", date: " 06-12-5123"},
-        {postID: 1, commentID: 4, author: "mouchou", content: "work", date: "30-02-632 BC"},
-        {postID: 1, commentID: 5, author: "asdasdasd", content: "thx", date: "31-05-2020"},
-    ]
-    
+    const comments= props.comments || [];
     function handleChange(e){
         const { name, value } = e.target;
+        console.log(comment)
+
         if(name ==="commentContent"){
             setComment(value);
         }
-        else if(name === "clearCommentBtn"){
-            console.log("clear btn")
-            document.getElementById("comment_form").reset();
-            setComment("");
-        }
-        console.log(comment)
+    }
+
+    function handleSubmit(e){
+        console.log("handleSubmit")
+        axios.post("http://localhost:5000/api/comments/comments", { author: JSON.parse(localStorage.getItem("user")).username, content: comment, postID: props.postID })
+            .then(res => {
+                console.log(res.data);
+            })
+            .catch(error => console.log(error))
     }
 
     return(
@@ -51,8 +49,7 @@ export default function Comments(props){
                             placeholder="Write a comment..."
                             required
                         />
-                        <Button className="submitCommentBtn" variant="info" size="sm" onCLick={handleChange} disabled={comment.length === 0 ? true : false}>Comment</Button>
-                        <Button name="clearCommentBtn" className="clearCommentBtn" variant="light" size="sm" onClick={handleChange} disabled={comment.length === 0 ? true : false}>Cancel</Button>
+                        <Button className="submitCommentBtn" variant="info" size="sm" onClick={handleSubmit} disabled={comment.length === 0 ? true : false}>Comment</Button>
                     </Form.Group>
                 </Form>
 

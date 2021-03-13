@@ -99,7 +99,7 @@ export default function Post(props) {
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
-                            <Comments />
+                            <Comments postID={props.postID} comments={props.comments}/>
                         </CardContent>
                     </Collapse>
                     </>

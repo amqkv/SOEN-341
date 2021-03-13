@@ -8,7 +8,7 @@ const CommentSchema = new Schema({
         required: true
     },
     commentID: {
-        type: String,
+        type: Number,
         required: true
     },
     author: {
