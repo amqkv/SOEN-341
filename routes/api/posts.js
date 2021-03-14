@@ -37,7 +37,7 @@ const fetch_10_post_from_db = function(req,res){
 router.post("/addPost", (async function (req, res) {
     try {
         // TODO validation must be done in the front end
-
+        
         // Await S3 uploading of the file
         await pify(upload.single('file'))(req, res)
 
@@ -47,7 +47,7 @@ router.post("/addPost", (async function (req, res) {
             image: req.body.image,
             description: req.body.description,
             S3Link:res['req']['file']['location'],
-            username:res.body.username
+            username:req.body.username
         });
     
         newPost.save().then(post => res.json(post))
@@ -102,8 +102,6 @@ router.get("/getLatestPost",(async function (req, res) {
         let comments = [];
         let date = "";
         Post.find({}).sort({ date: -1 }).then(async function(posts) {
-            console.log("posts fetched from database")
-            console.log(posts)
 
              for(const post of posts){
                 console.log("for loop")

@@ -43,20 +43,20 @@ export default function Post(props) {
     console.log(props)
     return (
         <Card className="post_card">
-            <CardHeader
-                avatar={
-                    <Avatar aria-label="post" className="avatar">
-                        user profile picture
-                    </Avatar>
-                }
-                action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
-                }
-                title={props.author}
-                subheader={props.date}
-            />
+                <CardHeader
+                    avatar={
+                        <Avatar aria-label="post" className="avatar">
+                            user profile picture
+                        </Avatar>
+                    }
+                    action={
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon />
+                        </IconButton>
+                    }
+                    title={<a className="card_post_author" href={"/UserProfile/" + props.author}>{props.author}</a>}
+                    subheader={props.date}
+                />
             <CardActionArea>
                 <CardMedia
                     component="img"

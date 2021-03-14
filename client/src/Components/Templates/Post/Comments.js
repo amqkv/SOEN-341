@@ -37,6 +37,7 @@ export default function Comments(props){
     }
     return(
         <div id="Comments">
+            {commentArr.length === 0 ? null : 
             <div className="postedComments">
             {/* Mapping the comment array */}
             {(commentArr).map(comment => 
@@ -47,6 +48,7 @@ export default function Comments(props){
                 </div>
             )}
             </div>
+            }
             {/* Comment input form */}
             <Form id={"comment_form_" + props.postID}>
                 <Form.Group>

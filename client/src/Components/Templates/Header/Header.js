@@ -10,6 +10,8 @@ import Link from '@material-ui/core/Link';
 import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
 import CreatePost from "../test_create_post_form";
+import logo from "../../../Images/Logo.png";
+
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -72,7 +74,7 @@ export default function Header(props) {
                     noWrap
                     className={classes.toolbarTitle}
                 >
-                <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}>{title}</a>
+                <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}><img width="250px" style={{paddingTop:"10px", marginLeft:"90px"}} src={logo} alt={props}/></a>
                 </Typography>
                 <IconButton>
                     <SearchIcon />

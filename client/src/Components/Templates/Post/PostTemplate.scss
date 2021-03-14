@@ -2,9 +2,7 @@
     text-align: left;
     padding: 10px;
     border-top: 1px  #ced4da solid;
-    // border-bottom: 1px solid #ced4da;
     width: 100%;
-    // background: #b3b3b3;
 }
 
 .postedComments{
@@ -47,4 +45,14 @@ a.comment-author{
     margin-right: 0;
     float: right;
     margin: 10px 5px;
+}
+
+.card_post_author{
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    &:hover{
+        color:#0077b3;
+        text-decoration: none;
+    }
 }

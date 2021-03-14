@@ -14,10 +14,15 @@ router.post("/comments", (req, res) => {
         console.log(req.body)
         let newCommentID;
         Comment.find({}).sort({_id: -1}).limit(1).exec(function(err, comment){
+            if(comment.length === 0){
+                newCommentID = 0;
+            }
+            else{
+                newCommentID = comment[0].commentID + 1;
+            }
             console.log(comment)
             
             // Setting the ID for the new comment
-            newCommentID = comment[0].commentID + 1;
 
             // Add Comment
             const newComment = new Post({

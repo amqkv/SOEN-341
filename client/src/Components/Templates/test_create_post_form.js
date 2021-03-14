@@ -12,7 +12,6 @@ export default function CreatePost(props){
     const [caption,setInputValue] = useState("");
     const { onClose, selectedValue, open } = props;
 
-
     // Function handling the closing of the dialog box (popup)
     const handleClose = () => {
       onClose(selectedValue);
@@ -38,7 +37,7 @@ export default function CreatePost(props){
         data.append("description",caption)
         data.append("image",fileInput.current.files[0].name)
         data.append('file', fileInput.current.files[0]);
-        data.append('username', JSON.parse(localStorage.getItem("user").username));
+        data.append('username', JSON.parse(localStorage.getItem("user")).username);
 
         // Send data to backend
         axios.post("/api/posts/addPost", data, {
@@ -47,7 +46,10 @@ export default function CreatePost(props){
             'Accept-Language': 'en-US,en;q=0.8',
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
           }
-        }).then(res => { console.log(res) })
+        }).then(res => { 
+          console.log(res) 
+          window.location.href="/Home"
+        })
         .catch(error => { console.log(error.response) });
     }
 
@@ -71,14 +73,6 @@ export default function CreatePost(props){
                 placeholder="Write a caption..."
               />
             </Form.Group>
-          {/* <label>
-            Description:
-            <input type="text" value={caption} onChange={handleChange} />
-          </label>
-        <label>
-          Upload file:
-          <input type="file" ref={fileInput} name="post_picture"/>
-        </label> */}
         <Button variant="info" type="submit" disabled={caption.length === 0 ? true : false}>Submit</Button>
       </Form>
       </Dialog>

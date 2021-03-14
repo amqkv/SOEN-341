@@ -23,7 +23,6 @@ import forever_alone from '../../../Images/forever_alone.jpg';
 import meme_man from '../../../Images/meme_man.jpg';
 import harold from '../../../Images/harold.jpg';
 import pikachu from '../../../Images/shocked pikachu.png';
-import logo from "../../../Images/Logo.png";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,8 +68,6 @@ const post1 =
         imagePath={forever_alone}
         text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     />
-
-
 
 const posts = [post1];
     //Gets the user profile to display it on top of page
@@ -122,9 +119,6 @@ const posts = [post1];
 
 
 export default function UserProfile(props) {
-
-
-
     // Checking the backend to see if the user is logged in
     useEffect(() => {
         if(localStorage.getItem("user") === null)
@@ -145,10 +139,7 @@ export default function UserProfile(props) {
             <Container maxWidth="lg">
                 <Header title="MemeSpace" sections={sections} handleUser={props.handleUser} currentUser={props.currentUser} />
                 <feed>
-                    <a href="/Home">
-                        <img src={logo} alt={props}/>
-                    </a>
-                    <h2>{window.location.href.split("/")[4]}</h2>
+                    <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
                     </div>
