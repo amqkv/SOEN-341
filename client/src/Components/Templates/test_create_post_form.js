@@ -38,6 +38,7 @@ export default function CreatePost(props){
         data.append("description",caption)
         data.append("image",fileInput.current.files[0].name)
         data.append('file', fileInput.current.files[0]);
+        data.append('username', JSON.parse(localStorage.getItem("user").username));
 
         // Send data to backend
         axios.post("/api/posts/addPost", data, {

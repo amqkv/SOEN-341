@@ -26,6 +26,10 @@ const PostSchema = new Schema({
     comments:{
         type: Array,
         default: []
+    },
+    username:{
+        type: String,
+        required: true
     }
 });
 

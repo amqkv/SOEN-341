@@ -1,6 +1,6 @@
 //base template: https://material-ui.com/components/cards/
 
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -19,17 +19,12 @@ import clsx from 'clsx';
 import Comments from "./Comments"
 import "./PostTemplate.scss";
 
-
-
 export default function Post(props) {
     const [expanded, setExpanded] = useState(false);
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-
     const user = JSON.parse(localStorage.getItem("user"))
-
-
     const useStyles = makeStyles((theme) => ({
           expand: {
             transform: 'rotate(0deg)',
@@ -72,10 +67,7 @@ export default function Post(props) {
                     title="My brain during exams"
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {props.title}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography variant="h6" color="textPrimary" component="p" align="left">
                         {props.text}
                     </Typography>
                 </CardContent>

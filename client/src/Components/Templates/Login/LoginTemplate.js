@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 
-import './Templates.css';
+import './Templates.scss';
 
 export default function LoginTemplate(props){
 

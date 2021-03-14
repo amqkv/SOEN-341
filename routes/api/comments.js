@@ -12,19 +12,26 @@ const Comment = require("../../models/Comment");
 router.post("/comments", (req, res) => {
     try {
         console.log(req.body)
+        let newCommentID;
         Comment.find({}).sort({_id: -1}).limit(1).exec(function(err, comment){
             console.log(comment)
+            
+            // Setting the ID for the new comment
+            newCommentID = comment[0].commentID + 1;
+
+            // Add Comment
+            const newComment = new Post({
+                postID: req.body.postID,
+                commentID: newCommentID,
+                author: req.body.author,
+                content: req.body.content
+            });
+
+            newComment.save();
+            res.send({success: "added comment"});
         })
-        // Add Comment
-        // const newComment = new Post({
-        //     postID: req.body.postID,
-        //     commentID: req.body.commentID,
-        //     author: req.body.author,
-        //     content: req.body.content
-        // });
-    
-        // newComment.save().then(comment => res.json(comment))
-    
+
+
     } catch(err) {
         // An error occurred when uploading 
         console.log(err)
