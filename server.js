@@ -12,12 +12,9 @@ require('dotenv/config');
 const passport = require("passport");
 const users = require("./routes/api/users");
 const posts = require("./routes/api/posts");
-<<<<<<< HEAD
 const follow = require("./routes/api/follow");
-=======
 const comments = require("./routes/api/comments");
 
->>>>>>> b9ba64c8c611330c320115adc61a48ee3885c21a
 const app = express();
 
 // Cors to allow cross-origin requests
@@ -53,12 +50,9 @@ require("./config/passport")(passport);
 //Routes
 app.use("/api/users", users);
 app.use("/api/posts", posts);
-<<<<<<< HEAD
 app.use("/api/follow", follow);
 
-=======
 app.use("/api/comments", comments); 
->>>>>>> b9ba64c8c611330c320115adc61a48ee3885c21a
 
 app.get("/", function (req, res){
   console.log("home page");
