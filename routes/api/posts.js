@@ -62,38 +62,6 @@ router.post("/addPost", (async function (req, res) {
 router.get("/getLatestPost",(async function (req, res) {
     try {
 
-        // Retrieve data from mongo DB
-        // let post = await Post.findOne().sort({ date: -1 })
-        // filekey = post['S3Link'].split('.com/')[1]
-
-        // TODO fetch valid user name using user ID
-
-        // // Fetch image from S3
-        // const s3_file_params  = { Bucket: process.env.S3_BUCKET, Key:filekey }
-        // let response = await s3.getObject(s3_file_params).promise();
-
-        // // Encode base64
-        // let buffer = Buffer.from(response["Body"])
-
-        // // Build response
-        // let temp = post["image"].split(".")
-
-        // // Fetching comments from database
-        // Comment.find({_id: post["_id"]}).then(comment => {
-        //     console.log("getting comments for post")
-        //     console.log(comment)
-        // })
-
-        // post_data = { "postID":post["_id"],
-        //               "ownerID":post["ownerID"],
-        //               "image": { "name":post["image"], "encoding":temp[temp.length -1],"file":buffer.toString("base64")},
-        //               "description":post["description"],
-        //               "date":post["date"]
-        //             }
-
-        // Dump the JSON and file into the response
-        // res.json(post_data)
-
         let s3_file_params = {};
         let response = null;
         let buffer = null;
