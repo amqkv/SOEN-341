@@ -23,7 +23,6 @@ import forever_alone from '../../../Images/forever_alone.jpg';
 import meme_man from '../../../Images/meme_man.jpg';
 import harold from '../../../Images/harold.jpg';
 import pikachu from '../../../Images/shocked pikachu.png';
-import logo from "../../../Images/Logo.png";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -163,10 +162,7 @@ export default function UserProfile(props) {
             <Container maxWidth="lg">
                 <Header title="MemeSpace" sections={sections} handleUser={props.handleUser} currentUser={props.currentUser} />
                 <feed>
-                    <a href="/Home">
-                        <img src={logo} alt={props}/>
-                    </a>
-                    <h2>{usernameS.visitedUsername}</h2>
+                    <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
                     </div>
@@ -181,7 +177,7 @@ export default function UserProfile(props) {
             </Container>
             <Container>
                 <br></br>
-                <h3>Browse olders memes from {user.username}</h3>
+                <h3>Browse olders memes from {user ? user.username : ""}</h3>
 
                 <div className={classes.root}>
                     <GridList cellHeight={180} className={classes.gridList}>

@@ -39,10 +39,9 @@
     background-repeat: no-repeat !important;
     background-position: right calc(.375em + .1875rem) center !important;
     background-size: calc(.75em + .375rem) calc(.75em + .375rem) !important;
-}
-
-.is-invalid:focus{
-    box-shadow: 0 0 0 0.2rem rgb(220 53 69 / 25%) !important
+    &:focus{
+        box-shadow: 0 0 0 0.2rem #dc3545 !important
+        }
 }
 
 .nav-tabs{

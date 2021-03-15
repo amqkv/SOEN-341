@@ -8,13 +8,6 @@ import Container from '@material-ui/core/Container';
 import {Post, Header, PostFeed, Footer} from '../../../Components/index';
 import axios from 'axios';
 
-//Hard coded test images
-//TODO link image fetch to db
-import pepega from '../../../Images/Pepega.png';
-import pikachu from '../../../Images/shocked pikachu.png';
-import videotron from '../../../Images/videotron.png'
-
-
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
         marginTop: theme.spacing(3),
@@ -36,54 +29,31 @@ const sections = [
 
 
 //Combine this with backend DB
-// var posts = [];
-const post1 = <Post
-author="Olivier"
-date="2021-02-12"
-title="Videotron"
-imagePath={videotron}
-text="Haha internet problems on quiz time goes brrrrr"
-/>
-
-const post2 = <Post
-author="Olivier"
-date="2021-02-11"
-title="Pepega"
-imagePath={pepega}
-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-/>
-
-const post3 = <Post
-author="Olivier"
-date="2021-02-11"
-title="Surprised Pikachu"
-imagePath={pikachu}
-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-/>
-
 export default function HomePage(props) {
 
     const [isLoading, setLoading] = useState(true);
-    const [posts,setPosts] = useState([post1,post2,post3]);
+    const [posts,setPosts] = useState([]);
 
     const classes = useStyles();
-    useEffect(() => {
-                    
+    useEffect(() => {              
         axios.get("/api/posts/getLatestPost", {params: { userID: "ID of the currently logged in user" }})
         .then(res => { 
-            console.log(res)
-            let temp = <Post
-                        author={ res.data['ownerID'] }
-                        date={ res.data['date'] }
-                        title="hey"
-                        base64img={res.data['image']['file']}
-                        fileEncoding={res.data['image']['encoding']}
-                        text={ res.data['description'] }/>
-
-            posts.push(temp)
+            console.log(res.data)
+            for(let x = 0; x < res.data.length; x++){
+                console.log(res.data[x]['date'])
+                posts.push(<Post 
+                        author={ res.data[x]['username'] }
+                        date={ res.data[x]['date'] }
+                        base64img={res.data[x]['image']['file']}
+                        fileEncoding={res.data[x]['image']['encoding']}
+                        text={ res.data[x]['description']}
+                        postID={ res.data[x]['postID'] }
+                        comments={ res.data[x]['comments'] } />
+                    )
+            }
             setLoading(false);
             
-        }).catch(error => { console.log(error.response) });
+        }).catch(error => { console.log(error) });
         
       }, []);
 

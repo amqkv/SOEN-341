@@ -2,20 +2,20 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 //Create schema of user
-const PostSchema = new Schema({
-    ownerID: {
+const CommentSchema = new Schema({
+    postID: {
         type: String,
         required: true
     },
-    image: {
+    commentID: {
+        type: Number,
+        required: true
+    },
+    author: {
         type: String,
         required: true
     },
-    S3Link: {
-        type: String,
-        required: true
-    },
-    description: {
+    content: {
         type: String,
         required: true
     },
@@ -23,14 +23,6 @@ const PostSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    comments:{
-        type: Array,
-        default: []
-    },
-    username:{
-        type: String,
-        required: true
-    }
 });
 
-module.exports = Post = mongoose.model("posts", PostSchema);
+module.exports = Post = mongoose.model("comments", CommentSchema);
