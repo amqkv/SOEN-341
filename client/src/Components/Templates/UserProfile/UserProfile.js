@@ -1,6 +1,6 @@
 //https://material-ui.com/getting-started/templates/blog/#
 
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -8,12 +8,12 @@ import Container from '@material-ui/core/Container';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import Button from 'react-bootstrap/Button'
+import axios from 'axios';
 
 import {Header, PostFeed, Footer, Post} from '../../index';
-import ContainedButtons from '../ContainedButtons';
 import ProfileStats from './ProfileStats';
 
 //Hard coded test images
@@ -58,7 +58,6 @@ const sections = [
     { title: 'Hard', url: '#' },
 ];
 
-
 //Combine this with backend DB
 const post1 =
     <Post
@@ -69,8 +68,6 @@ const post1 =
         imagePath={forever_alone}
         text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     />
-
-
 
 const posts = [post1];
     //Gets the user profile to display it on top of page
@@ -108,7 +105,6 @@ const posts = [post1];
             title: 'shocked pikachu',
             author: user ? user.username : "",
         },
-    
     ];
 
     //const profile = getFromBackend();
@@ -118,12 +114,9 @@ const posts = [post1];
         following: 9687
     }
 
-
-
-
 export default function UserProfile(props) {
 
-
+    const [follows, setFollows] = useState();
 
     // Checking the backend to see if the user is logged in
     useEffect(() => {
@@ -133,12 +126,37 @@ export default function UserProfile(props) {
 
     const classes = useStyles();
 
-        // Checking the backend to see if the user is logged in
+    // Checking the backend to see if the user is logged in
     useEffect(() => {
         if(localStorage.getItem("user") === null)
             window.location = "/login#redirect";
     }, [])
 
+    const usernameS = {currentUsername: JSON.parse(localStorage.getItem("user")).username, visitedUsername: window.location.href.split("/")[4]};
+
+    //Check if user already follows the other
+    useEffect(() => {
+       axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
+           .then(res => {
+                if(res.data.followersList.includes(usernameS.currentUsername)){
+                    //show unfollow
+                    setFollows(true);
+                }
+                else{
+                    //show follow
+                    setFollows(false);
+                }
+           })
+           .catch(error => console.log(error));
+    }, [])
+
+    function handleFollow(){
+        axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
+            .then(res => {
+                setFollows(!follows);
+            })
+            .catch(error => console.log(error));
+    }
     return (
         <div>
             <CssBaseline />
@@ -148,12 +166,12 @@ export default function UserProfile(props) {
                     <a href="/Home">
                         <img src={logo} alt={props}/>
                     </a>
-                    <h2>{user.username}</h2>
+                    <h2>{usernameS.visitedUsername}</h2>
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
                     </div>
                     <Container>
-                        <ContainedButtons />
+                        <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
                     </Container>
                     <Grid container className={classes.mainGrid}>
                         <PostFeed title="Profile Page" posts={posts} />
@@ -187,7 +205,6 @@ export default function UserProfile(props) {
                     </GridList>
                 </div>
             </Container>
-
             <Footer title="Footer" description="This is a footer" />
         </div>
     );
