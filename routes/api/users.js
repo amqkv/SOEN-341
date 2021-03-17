@@ -124,4 +124,18 @@ router.post("/login", (req,res) => {
     });
 });
 
+router.get("/getUser", (req,res) => {
+    console.log(req.query.username);
+    User.findOne({ username: req.query.username }).then(user => {
+        //Check if the user exists
+        if(!user) {
+            console.log("user doesn't exist")
+            return res.send({ error: "This user doesn't exist" });
+        }
+        //Check if correct password
+        
+                return res.status(200).json({ user });
+    });
+});
+
 module.exports = router;
