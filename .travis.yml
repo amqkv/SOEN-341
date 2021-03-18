@@ -24,7 +24,6 @@ services:
  - mongodb
 
 script:
-    -cd client
     -npm test
     -npm run build
 
