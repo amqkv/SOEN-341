@@ -7,7 +7,7 @@ before_install:
     - npm i -g npm@6.1.0
     - p=$(which npm)
     - rm $p
-    - ln -s /home/travis/.nvm/versions/node/v10.1.0/bin/npm $p || true
+    - ln -s /home/travis/.nvm/versions/node/v14.16.0/bin/npm $p || true
     - npm -v
     
 
