@@ -8,11 +8,9 @@ before_install:
     - p=$(which npm)
     - rm $p
     - ln -s /home/travis/.nvm/versions/node/v14.16.0/bin/npm $p || true
-    - npm -v
     
 
 before_script : cd client 
 
 script:
-  - npm run build
   - npm test
