@@ -7,23 +7,14 @@ import './App.css';
 
 
 function App() {
-  const [currentUser, setCurrentUser] = useState();
 
-  function handleUser(user){
-    setCurrentUser(user);
-  }
 
   return (
       <Router>
       <div className="App">
-        <Route exact path={["/", "/login", "/login#redirect"]} >
-          <LoginTemplate handleUser={handleUser} currentUser={currentUser} />
-        </Route>
+        <Route exact path={["/", "/login", "/login#redirect"]} component={LoginTemplate}/>
         <Route exact path="/Home" component={HomePage} />
-        <Route exact path="/post" component={CreatePost}/>
-        <Route path="/UserProfile">
-          <UserProfile  handleUser={handleUser} currentUser={currentUser} />
-        </Route>
+        <Route path="/UserProfile" component={UserProfile}/>
       </div>
       </Router>
   );
