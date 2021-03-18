@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { React, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CreatePost from './Components/Templates/test_create_post_form';
 import {LoginTemplate, HomePage, ProfileTemplate, UserProfile} from './Components/index';
