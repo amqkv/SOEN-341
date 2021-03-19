@@ -17,7 +17,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 import Comments from "./Comments"
-import "./PostTemplate.scss";
+import "./PostTemplate.css";
 
 export default function Post(props) {
     const [expanded, setExpanded] = useState(false);
