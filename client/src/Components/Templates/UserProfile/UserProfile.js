@@ -161,8 +161,14 @@ export default function UserProfile(props) {
         axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
             .then(res => {
                 setFollows(!follows);
+                axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
+                    .then(res => {
+                        setUser(res.data.user);    
+                })
+                    .catch(error => console.log(error));
             })
             .catch(error => console.log(error));
+        
     }
     console.log(props.currentUser);
     return !user ? null : (
