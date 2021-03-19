@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 
-import './Templates.scss';
+import './Templates.css';
 
 export default function LoginTemplate(props){
 
@@ -67,7 +67,6 @@ export default function LoginTemplate(props){
                         // Clear the input fields + set the state to the current user + redirect to user's profile
                         document.getElementById("login_form").reset();
                         setErrorMessage("");
-                        props.handleUser(res.data.user);
                         localStorage.setItem("user", JSON.stringify(res.data.user));
                         window.location = "/UserProfile/" + res.data.user.username;
                     }
