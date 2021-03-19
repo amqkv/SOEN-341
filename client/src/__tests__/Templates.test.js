@@ -4,10 +4,7 @@ import HomePage from "../Components/Templates/HomePage/HomePage";
 import LoginTemplate from "../Components/Templates/Login/LoginTemplate";
 import UserProfile from "../Components/Templates/UserProfile/UserProfile";
 
-it("renders homepage without crashing", () => {
-    const div = document.createElement("div");
-    ReactDOM.render(<HomePage/>, div);
-});
+
 
 it("renders login page without crashing", () => {
     const div = document.createElement("div");
