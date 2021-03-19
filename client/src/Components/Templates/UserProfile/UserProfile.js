@@ -71,6 +71,7 @@ const post1 =
 const posts = [post1];
     //Gets the user profile to display it on top of page
     const user = JSON.parse(localStorage.getItem("user"));
+    console.log(user);
 
     // User's past posts 
     const tileData = [
@@ -116,6 +117,7 @@ const posts = [post1];
 export default function UserProfile(props) {
 
     const [follows, setFollows] = useState();
+    const [user, setUser] = useState();
 
     // Checking the backend to see if the user is logged in
     useEffect(() => {
@@ -147,16 +149,29 @@ export default function UserProfile(props) {
                 }
            })
            .catch(error => console.log(error));
+
+        axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
+        .then(res => {
+            console.log(res);
+            setUser(res.data.user);
+        })
     }, [])
 
     function handleFollow(){
         axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
             .then(res => {
                 setFollows(!follows);
+                axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
+                    .then(res => {
+                        setUser(res.data.user);    
+                })
+                    .catch(error => console.log(error));
             })
             .catch(error => console.log(error));
+        
     }
-    return (
+    console.log(props.currentUser);
+    return !user ? null : (
         <div>
             <CssBaseline />
             <Container maxWidth="lg">
@@ -164,7 +179,7 @@ export default function UserProfile(props) {
                 <feed>
                     <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
                     <div className="profile-stats">
-                        <ProfileStats posts={profile.posts} followers={profile.followers} following={profile.following} />
+                        <ProfileStats posts={profile.posts} followers={user.followers.length} following={user.following.length} />
                     </div>
                     <Container>
                         <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
