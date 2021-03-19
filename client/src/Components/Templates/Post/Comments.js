@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
-import "./PostTemplate.scss";
+import "./PostTemplate.css";
 import Button from 'react-bootstrap/Button';
 import axios from "axios";
 

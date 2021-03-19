@@ -54,3 +54,7 @@ nodemon run server
 
 ## Pull Request Process
 Pull requests will have to be reviewed by minimum 3 other team members (excluding the requester) in order to be marged to main/production/master
+
+
+## Architecture
+![Block Diagram](./block_diagram.png)
