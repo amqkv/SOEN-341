@@ -50,7 +50,6 @@ export default function Header(props) {
     
     function login_logout(){
         if(localStorage.getItem("user") != null){
-            // props.handleUser(null);
             localStorage.clear();
         }
         window.location = "/login";

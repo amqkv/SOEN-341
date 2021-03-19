@@ -3,4 +3,8 @@ language: node_js
 node_js:
   - 14
 
-script:
+before_script: 
+  - cd client
+  - npm install
+
+

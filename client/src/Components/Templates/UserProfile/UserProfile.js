@@ -160,7 +160,7 @@ export default function UserProfile(props) {
         <div>
             <CssBaseline />
             <Container maxWidth="lg">
-                <Header title="MemeSpace" sections={sections} handleUser={props.handleUser} currentUser={props.currentUser} />
+                <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
                 <feed>
                     <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
                     <div className="profile-stats">
