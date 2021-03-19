@@ -33,14 +33,19 @@ export default function HomePage(props) {
 
     const [isLoading, setLoading] = useState(true);
     const [posts,setPosts] = useState([]);
-
+    const user = JSON.parse(localStorage.user)
     const classes = useStyles();
-    useEffect(() => {              
-        axios.get("/api/posts/getLatestPost", {params: { userID: "ID of the currently logged in user" }})
+
+    // Create Date references for filtering posts
+    var now = new Date();
+    
+    useEffect(() => {   
+
+        axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
         .then(res => { 
-            console.log(res.data)
+            // console.log(res.data)
             for(let x = 0; x < res.data.length; x++){
-                console.log(res.data[x]['date'])
+                // console.log(res.data[x]['date'])
                 posts.push(<Post 
                         author={ res.data[x]['username'] }
                         date={ res.data[x]['date'] }
