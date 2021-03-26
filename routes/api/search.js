@@ -8,8 +8,9 @@ router.get('/search', (req, res) => {
     console.log("Search route");
     console.log(req.body);
 
-    const regex = "\/"
-    const searchQuery = regex.concat(req.body,regex);
+    const regex1 = "\/";
+    const regex2 = "\/i";
+    const searchQuery = regex1.concat(req.body,regex2);
     console.log(searchQuery);
 
     const userArray = User.find( { username: searchQuery}, 'username');
