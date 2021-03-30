@@ -26,8 +26,14 @@ export default function Post(props) {
     };
     const user = JSON.parse(localStorage.getItem("user"))
     const useStyles = makeStyles((theme) => ({
+        root: {
+            width: props.width,
+            // height: (parseInt(props.width.substring(0,3), 10) + 192) + "px",
+            margin: "10px",
+        },
           expand: {
             transform: 'rotate(0deg)',
+            // height: "auto",
             marginLeft: 'auto',
             transition: theme.transitions.create('transform', {
               duration: theme.transitions.duration.shortest,
@@ -40,9 +46,8 @@ export default function Post(props) {
       
       const classes = useStyles();
 
-    console.log(props)
     return (
-        <Card className="post_card">
+        <Card className={classes.root}>
                 <CardHeader
                     avatar={
                         <Avatar aria-label="post" className="avatar">
@@ -61,7 +66,7 @@ export default function Post(props) {
                 <CardMedia
                     component="img"
                     alt="My brain during exams"
-                    height="auto"
+                    height={props.width}
                     image={props.imagePath}
                     src={`data:image/${props.fileEncoding};base64, ${props.base64img}`}
                     title="My brain during exams"

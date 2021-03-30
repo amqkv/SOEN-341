@@ -14,19 +14,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const sections = [
-    { title: 'Please', url: '#' },
-    { title: 'Give', url: '#' },
-    { title: 'Us', url: '#' },
-    { title: 'A', url: '#' },
-    { title: 'Good', url: '#' },
-    { title: 'Grade', url: '#' },
-    { title: 'Because', url: '#' },
-    { title: 'We', url: '#' },
-    { title: 'Worked', url: '#' },
-    { title: 'Hard', url: '#' },
-];
-
 
 //Combine this with backend DB
 export default function HomePage(props) {
@@ -47,6 +34,8 @@ export default function HomePage(props) {
             for(let x = 0; x < res.data.length; x++){
                 // console.log(res.data[x]['date'])
                 posts.push(<Post 
+                        width="600px"
+                        height="700px"
                         author={ res.data[x]['username'] }
                         date={ res.data[x]['date'] }
                         base64img={res.data[x]['image']['file']}
@@ -70,7 +59,7 @@ export default function HomePage(props) {
         <div>
             <CssBaseline />
             <Container maxWidth="lg">
-                <Header title="MemeSpace" sections={sections} />
+                <Header title="MemeSpace" />
                 <feed>
                     <Grid container className={classes.mainGrid} direction="column">
                         <PostFeed title="The Meme Feed" posts={posts} />

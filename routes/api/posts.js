@@ -15,7 +15,6 @@ require('dotenv/config');
 const max_posts_in_feed = 10
 const FormData = require('form-data');
 const validateAddPostInput = require("../../validation/addPost");
-// const { default: Comments } = require("../../client/src/Components/Templates/Post/Comments");
 
 
 //  Connect to S3
@@ -82,8 +81,9 @@ const fetch_posts_data = async function(array_of_posts){
 
         // Fetch comments from database
         comments = await Comment.find({postID: post._id}).sort({ date: -1 });
-        // console.log(post["date"].toString().substring(0, post["date"].toString().indexOf("GMT") - 10))
+
         date = post["date"].toString().substring(0, post["date"].toString().indexOf("GMT") - 10)
+        
         post_data.push({
             "postID": post["_id"],
             "ownerID":post["ownerID"],
@@ -135,6 +135,52 @@ router.get("/getFeed",(async function (req, res) {
         return
     }
 }));
+
+router.post("/getUserPosts", (async function (req, res){
+    let s3_file_params = {};
+    let response = null;
+    let buffer = null;
+    let temp = null;
+    let post_data = [];
+    let comments = [];
+    let date = "";
+
+    Post.find({'username': req.body.username}).then(async posts => {
+        for(let n = 0; n < posts.length; n++){
+            let post = posts[n];
+          
+            //Retrieve data from mongo DB
+            filekey = (post.S3Link).split('.com/')[1];
+
+            // Fetch image from S3
+            s3_file_params = { Bucket: process.env.S3_BUCKET, Key:filekey }
+            response = await s3.getObject(s3_file_params).promise();
+
+            // Encode base64
+            buffer = Buffer.from(response["Body"]);
+
+            // Build response
+            temp = post["image"].split(".");
+
+            // Fetch comments from database
+            comments = await Comment.find({postID: post._id}).sort({ date: -1 });
+            
+            date = post["date"].toString().substring(0, post["date"].toString().indexOf("GMT") - 10);
+
+            post_data.push({
+                "postID": post["_id"],
+                "ownerID":post["ownerID"],
+                "image": { "name":post["image"], "encoding":temp[temp.length -1],"file":buffer.toString("base64")},
+                "description":post["description"],
+                "date": date,
+                "comments": comments,
+                "username": post["username"]
+            })
+        }
+        console.log(post_data.length)
+        res.json(post_data);
+    });
+}))
 
 
 module.exports = router;

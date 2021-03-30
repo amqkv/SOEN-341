@@ -1,7 +1,6 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import CreatePost from './Components/Templates/Create_Post_Form';
-import {LoginTemplate, HomePage, ProfileTemplate, UserProfile} from './Components/index';
+import {LoginTemplate, HomePage, UserProfile} from './Components/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 

@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
-import CreatePost from "../Create_Post_Form";
+import CreatePost from "./CreatePostForm";
 import logo from "../../../Images/Logo.png";
 
 
@@ -43,8 +43,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
     const classes = useStyles();
-    const { sections, title } = props;
     const [open, setOpen] = useState(false);
+
+    const sections = [
+        { title: 'Please', url: '#' },
+        { title: 'Give', url: '#' },
+        { title: 'Us', url: '#' },
+        { title: 'A', url: '#' },
+        { title: 'Good', url: '#' },
+        { title: 'Grade', url: '#' },
+        { title: 'Because', url: '#' },
+        { title: 'We', url: '#' },
+        { title: 'Worked', url: '#' },
+        { title: 'Hard', url: '#' },
+    ];
 
     const user = JSON.parse(localStorage.getItem("user"));
     
