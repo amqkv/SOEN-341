@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
-import CreatePost from "../test_create_post_form";
+import CreatePost from "../Create_Post_Form";
 import logo from "../../../Images/Logo.png";
 
 
