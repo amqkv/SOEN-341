@@ -145,7 +145,7 @@ router.post("/getUserPosts", (async function (req, res){
     let comments = [];
     let date = "";
 
-    Post.find({'username': req.body.username}).then(async posts => {
+    Post.find({'username': req.body.username}).sort({ date: -1 }).then(async posts => {
         for(let n = 0; n < posts.length; n++){
             let post = posts[n];
           
