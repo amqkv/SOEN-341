@@ -1,6 +1,6 @@
 //base template: https://material-ui.com/components/cards/
 
-import { React, useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -21,10 +21,12 @@ import "./PostTemplate.css";
 
 export default function Post(props) {
     const [expanded, setExpanded] = useState(false);
+
+    // Function to expand the comments section
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    const user = JSON.parse(localStorage.getItem("user"))
+
     const useStyles = makeStyles((theme) => ({
         root: {
             width: props.width,
@@ -48,20 +50,22 @@ export default function Post(props) {
 
     return (
         <Card className={classes.root}>
-                <CardHeader
-                    avatar={
-                        <Avatar aria-label="post" className="avatar">
-                            user profile picture
-                        </Avatar>
-                    }
-                    action={
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
-                    }
-                    title={<a className="card_post_author" href={"/UserProfile/" + props.author}>{props.author}</a>}
-                    subheader={props.date}
-                />
+            {/* Header of the post containing the user's avatar and username */}
+            <CardHeader
+                avatar={
+                    <Avatar aria-label="post" className="avatar">
+                        user profile picture
+                    </Avatar>
+                }
+                action={
+                    <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                    </IconButton>
+                }
+                title={<a className="card_post_author" href={"/UserProfile/" + props.author}>{props.author}</a>}
+                subheader={props.date}
+            />
+            {/* Content of the post (image + caption) */}
             <CardActionArea>
                 <CardMedia
                     component="img"
@@ -78,9 +82,9 @@ export default function Post(props) {
                 </CardContent>
             </CardActionArea>
 
-            {
-                props.showActions ? (
-                    <>
+            {/* Comments section */}
+            {props.showActions ? 
+                <>
                     <CardActions>
                         <Button size="small" color="default">
                             Like
@@ -99,10 +103,9 @@ export default function Post(props) {
                             <Comments postID={props.postID} comments={props.comments}/>
                         </CardContent>
                     </Collapse>
-                    </>
-                ) : null
-            }
-            
+                </>
+            : 
+            null}
         </Card>
     );
 }

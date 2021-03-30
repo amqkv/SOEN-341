@@ -19,20 +19,14 @@ const useStyles = makeStyles((theme) => ({
 export default function HomePage(props) {
 
     const [isLoading, setLoading] = useState(true);
-    const [posts,setPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
     const user = JSON.parse(localStorage.user)
     const classes = useStyles();
 
-    // Create Date references for filtering posts
-    var now = new Date();
-    
     useEffect(() => {   
-
         axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
         .then(res => { 
-            // console.log(res.data)
             for(let x = 0; x < res.data.length; x++){
-                // console.log(res.data[x]['date'])
                 posts.push(<Post 
                         width="600px"
                         height="700px"
@@ -49,7 +43,7 @@ export default function HomePage(props) {
             
         }).catch(error => { console.log(error) });
         
-      }, []);
+      }, [posts, user]);
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
@@ -60,11 +54,9 @@ export default function HomePage(props) {
             <CssBaseline />
             <Container maxWidth="lg">
                 <Header title="MemeSpace" />
-                <feed>
                     <Grid container className={classes.mainGrid} direction="column">
                         <PostFeed title="The Meme Feed" posts={posts} />
                     </Grid>
-                </feed>
             </Container>
             <Footer title="Footer" description="This is a footer :^)" />
         </div>

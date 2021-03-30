@@ -1,6 +1,5 @@
 import { React, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import PostTemplate from "../Post/PostTemplate";
 import Grid from '@material-ui/core/Grid';
 
 export default function ProfilePosts(props){
@@ -10,9 +9,10 @@ export default function ProfilePosts(props){
     return(
         <Container>
             {posts.map(post => {
-                <Grid item xs={12} sm={6} justify="center">
-                    {post}
-                </Grid>
+                return(                
+                    <Grid item xs={12} sm={6} justify="center">
+                        {post}
+                    </Grid>)
             })}
         </Container>
     )
