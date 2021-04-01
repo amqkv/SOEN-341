@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import Button from 'react-bootstrap/Button'
 import axios from 'axios';
+import EditAccountPopup from "../edit_account_form";
 
 import {Header, PostFeed, Footer, Post} from '../../index';
 import ProfileStats from './ProfileStats';
@@ -118,6 +119,7 @@ export default function UserProfile(props) {
 
     const [follows, setFollows] = useState();
     const [user, setUser] = useState();
+    const [open, setOpen] = useState(false);
 
     // Checking the backend to see if the user is logged in
     useEffect(() => {
@@ -170,14 +172,23 @@ export default function UserProfile(props) {
             .catch(error => console.log(error));
         
     }
+
+    function handleOpen(){
+        setOpen(!open);
+    }
+
     console.log(props.currentUser);
     return !user ? null : (
         <div>
+            {open ? <EditAccountPopup open={open} onClose={handleOpen}/> : null}
             <CssBaseline />
             <Container maxWidth="lg">
                 <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
                 <feed>
                     <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
+                    <Container>
+                        <Button onClick={handleOpen} variant="info">Edit Account</Button>
+                    </Container>
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={user.followers.length} following={user.following.length} />
                     </div>
