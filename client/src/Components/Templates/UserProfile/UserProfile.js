@@ -158,6 +158,9 @@ export default function UserProfile(props) {
         axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
         .then(res => {
             console.log(res);
+            if(res.data.error){
+                window.location.href = "/Home/#";
+            }
             setUser(res.data.user);
         })
     }, [])

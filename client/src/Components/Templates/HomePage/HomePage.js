@@ -7,12 +7,21 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import {Post, Header, PostFeed, Footer} from '../../../Components/index';
 import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
         marginTop: theme.spacing(3),
     },
+    root: {
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+    },
 }));
+
 
 const sections = [
     { title: 'Please', url: '#' },
@@ -26,7 +35,7 @@ const sections = [
     { title: 'Worked', url: '#' },
     { title: 'Hard', url: '#' },
 ];
-
+  
 
 //Combine this with backend DB
 export default function HomePage(props) {
@@ -35,12 +44,13 @@ export default function HomePage(props) {
     const [posts,setPosts] = useState([]);
     const user = JSON.parse(localStorage.user)
     const classes = useStyles();
-
+    const [openAlert, setOpenAlert] = useState(false);
     // Create Date references for filtering posts
     var now = new Date();
     
-    useEffect(() => {   
 
+
+    useEffect(() => {   
         axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
         .then(res => { 
             // console.log(res.data)
@@ -60,7 +70,12 @@ export default function HomePage(props) {
             
         }).catch(error => { console.log(error) });
         
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        if(window.location.href.includes("#"))
+            setOpenAlert(true);
+    }, []);
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
@@ -68,6 +83,14 @@ export default function HomePage(props) {
     
     return (
         <div>
+            {openAlert ? 
+                <div className={classes.root}>
+                    <Alert severity="error" onClose={() => {setOpenAlert(false)}}>That user does not exist!</Alert>
+                </div>
+                :
+                null
+            }
+
             <CssBaseline />
             <Container maxWidth="lg">
                 <Header title="MemeSpace" sections={sections} />
