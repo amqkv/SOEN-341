@@ -1,5 +1,4 @@
-import FormData from 'form-data';
-import { React, useRef, useState } from 'react';
+import { React, useState } from 'react';
 import axios from 'axios';
 import Dialog from '@material-ui/core/Dialog';
 import Tabs from 'react-bootstrap/Tabs';
@@ -7,7 +6,6 @@ import Tab from 'react-bootstrap/Tab';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-// import "./Form.css";
 import "../Templates/Login/Templates.css"
 import Alert from '@material-ui/lab/Alert';
 
@@ -80,7 +78,7 @@ export default function EditAccountPopup(props) {
                 document.getElementById("editOldEmailPassword").classList.add("is-invalid");
             }
         }
-        //else for axios
+        // POST form input data to the backend 
         else{
             axios.post("http://localhost:5000/api/edit/editEmail", {newEmail: editEmail, password: editOldPassword, username: user.username})
             .then(res => {
@@ -114,7 +112,7 @@ export default function EditAccountPopup(props) {
             setErrorMessage("This is already your username stoopid");
             setSuccessMessage("");
         }
-        //else for axios
+        // POST form input data to backend
         else{
             axios.post("http://localhost:5000/api/edit/editUsername", {newUsername: editUsername, password: editOldPassword, username: user.username})
             .then(res => {
@@ -155,7 +153,7 @@ export default function EditAccountPopup(props) {
                 document.getElementById("newPassword2").classList.add("is-invalid");
             }
         }
-        //else for axios
+        // POST form input data to backend
         else{
             axios.post("http://localhost:5000/api/edit/editPassword", {username: user.username, oldPassword: editOldPassword, newPassword: editNewPassword})
             .then(res => {
@@ -179,10 +177,12 @@ export default function EditAccountPopup(props) {
     return (
         <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle>Change account settings</DialogTitle>
+            {/* Display success/error messages */}
             {errorMessage === "" ? <></> : <Alert severity="error">{errorMessage}</Alert>}
             {successMessage === "" ? <></> : <Alert severity="success">{successMessage}</Alert>}
             <Tabs  activeKey={currentTab} id="login_register_tabs" onSelect={handleTabSelect}>
-                    <Tab eventKey="editEmail" title="Change Email">
+                {/* Form to change email */}
+                <Tab eventKey="editEmail" title="Change Email">
                     <Form id="edit_account_form" validated={editEmailValidated}>
                             <Form.Group>
                                 <Form.Control
@@ -210,77 +210,79 @@ export default function EditAccountPopup(props) {
                         </Form.Group>
                         <Button onClick={handleEditEmail} variant="info" >Submit</Button>
                     </Form>
-                    </Tab>
-                    <Tab eventKey="editUsername" title="Change Username">
-                        <Form id="edit_account_form" validated={setEditUsernameValidated}>
-                            <Form.Group>
-                               <Form.Control
-                                    name="editUsername"
-                                    id="editUsername"
-                                    onChange={handleChange}
-                                    type="text"
-                                    placeholder="New Username"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Username must be at least 5 characters.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Control
-                                    name="editOldPassword"
-                                    id="editOldUsernamePassword"
-                                    onChange={handleChange}
-                                    type="password"
-                                    placeholder="Old Password"
-                                />  
-                                <Form.Control.Feedback type="invalid">
-                                    Password must be at least 8 characters.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Button onClick={handleEditUsername} variant="info">Submit</Button>
-                        </Form>
-                    </Tab>
-                    <Tab eventKey="editPassword" title="Change Password">
-                        <Form id="edit_account_form" validated={editPasswordValidated}>
-                            <Form.Group>
-                               <Form.Control
-                                    name="editOldPassword"
-                                    id="oldPassword"
-                                    onChange={handleChange}
-                                    type="password"
-                                    placeholder="Old Password"
-                                /> 
-                                <Form.Control.Feedback type="invalid">
-                                    Passwprd must be at least 8 characters.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Control
-                                    name="editNewPassword"
-                                    id="newPassword"
-                                    onChange={handleChange}
-                                    type="password"
-                                    placeholder="New Password"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Password must be at least 8 characters.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Control
-                                    name="editNewPassword2"
-                                    id="newPassword2"
-                                    onChange={handleChange}
-                                    type="password"
-                                    placeholder="Confirm Password"
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Passwords must match.
-                                </Form.Control.Feedback>
-                            </Form.Group>                            
-                            <Button onClick={handleEditPassword} variant="info">Submit</Button>
-                        </Form>
-                    </Tab>
+                </Tab>
+                {/* Form to change sername */}
+                <Tab eventKey="editUsername" title="Change Username">
+                    <Form id="edit_account_form" validated={setEditUsernameValidated}>
+                        <Form.Group>
+                            <Form.Control
+                                name="editUsername"
+                                id="editUsername"
+                                onChange={handleChange}
+                                type="text"
+                                placeholder="New Username"
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Username must be at least 5 characters.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                name="editOldPassword"
+                                id="editOldUsernamePassword"
+                                onChange={handleChange}
+                                type="password"
+                                placeholder="Old Password"
+                            />  
+                            <Form.Control.Feedback type="invalid">
+                                Password must be at least 8 characters.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Button onClick={handleEditUsername} variant="info">Submit</Button>
+                    </Form>
+                </Tab>
+                {/* Form to change password */}
+                <Tab eventKey="editPassword" title="Change Password">
+                    <Form id="edit_account_form" validated={editPasswordValidated}>
+                        <Form.Group>
+                            <Form.Control
+                                name="editOldPassword"
+                                id="oldPassword"
+                                onChange={handleChange}
+                                type="password"
+                                placeholder="Old Password"
+                            /> 
+                            <Form.Control.Feedback type="invalid">
+                                Passwprd must be at least 8 characters.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                name="editNewPassword"
+                                id="newPassword"
+                                onChange={handleChange}
+                                type="password"
+                                placeholder="New Password"
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Password must be at least 8 characters.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                name="editNewPassword2"
+                                id="newPassword2"
+                                onChange={handleChange}
+                                type="password"
+                                placeholder="Confirm Password"
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Passwords must match.
+                            </Form.Control.Feedback>
+                        </Form.Group>                            
+                        <Button onClick={handleEditPassword} variant="info">Submit</Button>
+                    </Form>
+                </Tab>
             </Tabs>
         </Dialog>
 
