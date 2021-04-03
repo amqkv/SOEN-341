@@ -27,6 +27,9 @@ import pikachu from '../../../Images/shocked pikachu.png';
 
 
 const useStyles = makeStyles((theme) => ({
+    editContainer: {
+        margin: "5px"
+    },
     mainGrid: {
         marginTop: theme.spacing(3),
     },
@@ -186,15 +189,19 @@ export default function UserProfile(props) {
                 <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
                 <feed>
                     <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
-                    <Container>
-                        <Button onClick={handleOpen} variant="info">Edit Account</Button>
-                    </Container>
+
                     <div className="profile-stats">
                         <ProfileStats posts={profile.posts} followers={user.followers.length} following={user.following.length} />
                     </div>
                     <Container>
                         <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
                     </Container>
+                    {usernameS.currentUsername === usernameS.visitedUsername ? 
+                        <Container className={classes.editContainer}>
+                            <Button onClick={handleOpen} variant="secondary" >Edit Account</Button>
+                        </Container>
+                        :
+                        null}  
                     <Grid container className={classes.mainGrid}>
                         <PostFeed title="Profile Page" posts={posts} />
                     </Grid>

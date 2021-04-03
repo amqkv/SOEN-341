@@ -14,6 +14,7 @@ const users = require("./routes/api/users");
 const posts = require("./routes/api/posts");
 const follow = require("./routes/api/follow");
 const comments = require("./routes/api/comments");
+const edit = require("./routes/api/edit");
 
 const app = express();
 
@@ -51,6 +52,7 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/posts", posts);
 app.use("/api/follow", follow);
+app.use("/api/edit", edit);
 
 app.use("/api/comments", comments); 
 

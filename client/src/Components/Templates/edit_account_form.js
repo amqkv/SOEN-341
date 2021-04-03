@@ -7,21 +7,30 @@ import Tab from 'react-bootstrap/Tab';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import "./Form.css";
+// import "./Form.css";
+import "../Templates/Login/Templates.css"
 import Alert from '@material-ui/lab/Alert';
 
 export default function EditAccountPopup(props) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
     const [editEmail, setEditEmail] = useState("");
     const [editUsername, setEditUsername] = useState("");
+
     const [editOldPassword, setEditOldPassword] = useState("");
     const [editNewPassword, setEditNewPassword] = useState("");
     const [editNewPassword2, setEditNewPassword2] = useState("");
+
     const [currentTab, setCurrentTab] = useState("editEmail");
     const { onClose, selectedValue, open } = props;
-    const [editValidated, setEditValidated] = useState(false);
+
+    const [editEmailValidated, setEditEmailValidated] = useState(false);
+    const [editUsernameValidated, setEditUsernameValidated] = useState(false);
+    const [editPasswordValidated, setEditPasswordValidated] = useState(false);
+
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
-    const [editPasswordValidated, setEditPasswordValidated] = useState("false");
+
 
     // Function handling the closing of the dialog box (popup)
     const handleClose = () => {
@@ -60,33 +69,82 @@ export default function EditAccountPopup(props) {
 
     //Handling of edit email
     function handleEditEmail(e) {
-        if(editEmail.length === 0){
+        if(editEmail.length === 0 || editOldPassword.length < 8){
             e.preventDefault();
             e.stopPropagation();
-            setEditValidated(true);
+            setEditEmailValidated(true);
+            if(editEmail.length === 0){
+                document.getElementById("editEmail").classList.add("is-invalid");
+            }
+            if(editOldPassword.length < 8){
+                document.getElementById("editOldEmailPassword").classList.add("is-invalid");
+            }
         }
         //else for axios
+        else{
+            axios.post("http://localhost:5000/api/edit/editEmail", {newEmail: editEmail, password: editOldPassword, username: user.username})
+            .then(res => {
+                console.log(res);
+                if(res.data.success){
+                    setErrorMessage("");
+                    setSuccessMessage(res.data.success);
+                    window.location.href="/UserProfile/" + user.username;
+                }
+                else if(res.data.error){
+                    setSuccessMessage("")
+                    setErrorMessage(res.data.error);
+                }
+            })
+            .catch(err => console.log(err));
+        }
     }
 
     //Handling of edit username
     function handleEditUsername(e) {
-        if(editUsername.length < 5) {
+        if(editUsername.length < 5 || editOldPassword.length < 8) {
             e.preventDefault();
             e.stopPropagation();
-            setEditValidated(true);
+            setEditUsernameValidated(true);
+            if(editUsername.length < 5)
+                document.getElementById("editUsername").classList.add("is-invalid");
+            if(editOldPassword.length < 8)
+                document.getElementById("editOldUsernamePassword").classList.add("is-invalid");
+        }
+        if(editUsername === user.username){
+            setErrorMessage("This is already your username stoopid");
+            setSuccessMessage("");
         }
         //else for axios
+        else{
+            axios.post("http://localhost:5000/api/edit/editUsername", {newUsername: editUsername, password: editOldPassword, username: user.username})
+            .then(res => {
+                console.log(res);
+                if(res.data.success){
+                    setErrorMessage("");
+                    setSuccessMessage(res.data.success);
+                    user.username = editUsername;
+                    localStorage.setItem("user", JSON.stringify(user));
+                    window.location.href= "/UserProfile/" + editUsername;
+                }
+                else if(res.data.error){
+                    setSuccessMessage("")
+                    setErrorMessage(res.data.error);
+                }
+            })
+            .catch(err => console.log(err));
+        }
     }
 
     // Handling of edit password
     function handleEditPassword(e) {
         let oldPwIsInvalid = editOldPassword.length < 8;
         let newPwIsInvalid = editNewPassword.length < 8;
-        let confirmPwInvalid = editNewPassword2 !== editNewPassword;
+        let confirmPwInvalid = (editNewPassword2 !== editNewPassword) || editNewPassword2.length < 8 ;
         // If the email or password entered are not valid then the request will not be sent to backend
         if(oldPwIsInvalid || newPwIsInvalid || confirmPwInvalid){
             e.preventDefault();
             e.stopPropagation();
+            setEditPasswordValidated(true);
             if(oldPwIsInvalid) {
                 document.getElementById("oldPassword").classList.add("is-invalid");
             }
@@ -96,14 +154,26 @@ export default function EditAccountPopup(props) {
             if(confirmPwInvalid){
                 document.getElementById("newPassword2").classList.add("is-invalid");
             }
-            else {
-                document.getElementById("oldPassword").classList.remove("is-invalid");
-                document.getElementById("newPassword").classList.remove("is-invalid");
-                document.getElementById("newPassword2").classList.remove("is-invalid");
-                setEditPasswordValidated(true); 
-            }      
         }
         //else for axios
+        else{
+            axios.post("http://localhost:5000/api/edit/editPassword", {username: user.username, oldPassword: editOldPassword, newPassword: editNewPassword})
+            .then(res => {
+                console.log(res);
+                if(res.data.success){
+                    setSuccessMessage(res.data.success);
+                    setErrorMessage("");
+                    window.location.href="/UserProfile/" + user.username;
+                }
+                else if(res.data.error){
+                    setErrorMessage(res.data.error);
+                    setSuccessMessage("");
+                }
+            })
+            .catch(err => {
+                console.log (err);
+            })
+        }
     }
 
     return (
@@ -113,55 +183,84 @@ export default function EditAccountPopup(props) {
             {successMessage === "" ? <></> : <Alert severity="success">{successMessage}</Alert>}
             <Tabs  activeKey={currentTab} id="login_register_tabs" onSelect={handleTabSelect}>
                     <Tab eventKey="editEmail" title="Change Email">
-                    <Form id="edit_account_form">
-                        <Form.Group>
-                            <Form.Control
-                            name="editEmail"
-                            onChange={handleChange}
-                            type="text"
-                            placeholder="New Email"
-                            />  
+                    <Form id="edit_account_form" validated={editEmailValidated}>
+                            <Form.Group>
+                                <Form.Control
+                                name="editEmail"
+                                id="editEmail"
+                                onChange={handleChange}
+                                type="email"
+                                placeholder="New Email"
+                            />
                             <Form.Control.Feedback type="invalid">
                                     Please enter a valid email.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                name="editOldPassword"
+                                id="editOldEmailPassword"
+                                onChange={handleChange}
+                                type="password"
+                                placeholder="Old Password"
+                            />    
+                            <Form.Control.Feedback type="invalid">
+                                    Password must be at least 8 characters.
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Button onClick={handleEditEmail} variant="info" >Submit</Button>
                     </Form>
                     </Tab>
                     <Tab eventKey="editUsername" title="Change Username">
-                        <Form id="edit_account_form">
+                        <Form id="edit_account_form" validated={setEditUsernameValidated}>
                             <Form.Group>
                                <Form.Control
-                                name="editUsername"
-                                onChange={handleChange}
-                                type="text"
-                                placeholder="New Username"
+                                    name="editUsername"
+                                    id="editUsername"
+                                    onChange={handleChange}
+                                    type="text"
+                                    placeholder="New Username"
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     Username must be at least 5 characters.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Control
+                                    name="editOldPassword"
+                                    id="editOldUsernamePassword"
+                                    onChange={handleChange}
+                                    type="password"
+                                    placeholder="Old Password"
+                                />  
+                                <Form.Control.Feedback type="invalid">
+                                    Password must be at least 8 characters.
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Button onClick={handleEditUsername} variant="info">Submit</Button>
                         </Form>
                     </Tab>
                     <Tab eventKey="editPassword" title="Change Password">
-                        <Form id="edit_account_form">
+                        <Form id="edit_account_form" validated={editPasswordValidated}>
                             <Form.Group>
                                <Form.Control
-                                name="editOldPassword"
-                                id="oldPassword"
-                                onChange={handleChange}
-                                type="password"
-                                placeholder="Old Password"
+                                    name="editOldPassword"
+                                    id="oldPassword"
+                                    onChange={handleChange}
+                                    type="password"
+                                    placeholder="Old Password"
                                 /> 
+                                <Form.Control.Feedback type="invalid">
+                                    Passwprd must be at least 8 characters.
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Control
-                                name="editNewPassword"
-                                id="newPassword"
-                                onChange={handleChange}
-                                type="password"
-                                placeholder="New Password"
+                                    name="editNewPassword"
+                                    id="newPassword"
+                                    onChange={handleChange}
+                                    type="password"
+                                    placeholder="New Password"
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     Password must be at least 8 characters.
@@ -169,11 +268,11 @@ export default function EditAccountPopup(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Control
-                                name="editNewPassword2"
-                                id="newPassword2"
-                                onChange={handleChange}
-                                type="password"
-                                placeholder="Confirm Password"
+                                    name="editNewPassword2"
+                                    id="newPassword2"
+                                    onChange={handleChange}
+                                    type="password"
+                                    placeholder="Confirm Password"
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     Passwords must match.
