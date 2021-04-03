@@ -24,7 +24,7 @@ export default function UserProfile(props) {
     const [follows, setFollows] = useState();
     const [user, setUser] = useState();
     const [posts, setPosts] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [openPost, setOpenPost] = useState(false);
     const [postViewed, setPostViewed] = useState();
 
     // Checking the backend to see if the user is logged in
@@ -90,11 +90,11 @@ export default function UserProfile(props) {
     // Opens a popup to view the post & be able to comment
     function handleViewPost(post){
         setPostViewed(post);
-        setOpen(!open);
+        setOpenPost(!openPost);
     }
     return !user ? null : (
         <div>
-            {open ? <ViewPostPopup open={open} onClose={handleViewPost} post={postViewed}/> : null}
+            {openPost ? <ViewPostPopup open={openPost} onClose={handleViewPost} post={postViewed}/> : null}
             {/* Header section of the user profile containing user's stats */}
             <Container maxWidth="lg">
                 <Header title="MemeSpace" />
