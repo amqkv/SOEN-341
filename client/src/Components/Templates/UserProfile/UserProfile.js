@@ -16,8 +16,6 @@ import ProfileStats from './ProfileStats';
 
 //Gets the user profile to display it on top of page
 const user = JSON.parse(localStorage.getItem("user"));
-console.log(user);
-
 
 export default function UserProfile(props) {
 
