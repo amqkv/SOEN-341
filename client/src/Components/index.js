@@ -5,5 +5,6 @@ import Header from "./Templates/Header/Header";
 import HomePage from "./Templates/HomePage/HomePage";
 import LoginTemplate from "./Templates/Login/LoginTemplate";
 import UserProfile from "./Templates/UserProfile/UserProfile";
+import Search from "./Templates/Search/Search";
 
-export {Post, PostFeed, Footer, HomePage, Header, LoginTemplate, UserProfile};
+export {Post, PostFeed, Footer, HomePage, Header, LoginTemplate, UserProfile, Search};

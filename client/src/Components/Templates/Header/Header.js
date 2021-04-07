@@ -10,7 +10,9 @@ import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
 import CreatePost from "../test_create_post_form";
 import logo from "../../../Images/Logo.png";
-import {InputBase} from "@material-ui/core";
+import {FormControl, InputBase} from "@material-ui/core";
+import { Redirect } from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        
+
     },
     inputRoot: {
         color: 'inherit',
@@ -79,13 +81,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 export default function Header(props) {
+
     const classes = useStyles();
     const { sections, title } = props;
     const [open, setOpen] = useState(false);
+    const state =  {
+        results: [],
+        term: '',
+    };
+
+
+
 
     const user = JSON.parse(localStorage.getItem("user"));
-    
+
     function login_logout(){
         if(localStorage.getItem("user") != null){
             localStorage.clear();
@@ -93,10 +105,17 @@ export default function Header(props) {
         window.location = "/login";
     }
 
+    const onChange = (event) => {
+        console.log(event.target.value);
+    };
+
+    const onSubmit = (event) => {
+        console.log("HELLO FROM SUBMIT",event.target.value);
+    }
+
     function handleCreate(){
         setOpen(!open);
     }
-
 
     return (
         <div id="Header">
@@ -111,25 +130,32 @@ export default function Header(props) {
                     noWrap
                     className={classes.toolbarTitle}
                 >
-                <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}><img width="250px" style={{paddingTop:"10px", marginLeft:"90px"}} src={logo} alt={props}/></a>
+                    <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}><img width="250px" style={{paddingTop:"10px", marginLeft:"90px"}} src={logo} alt={props}/></a>
                 </Typography>
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon />
+
+                <FormControl onSubmit={onSubmit}>
+                    <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                            <IconButton type="submit">
+                                <SearchIcon />
+                            </IconButton>
+                        </div>
+                        <InputBase
+                            placeholder="Search…"
+                            classes={{
+                                root: classes.inputRoot,
+                                input: classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'search' }}
+                            onChange={onChange}
+                        />
                     </div>
-                    <InputBase
-                        placeholder="Search…"
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                        inputProps={{ 'aria-label': 'search' }}
-                    />
-                </div>
+                </FormControl>
+
                 <Button variant="outlined" size="small" onClick={login_logout}>
                     {localStorage.getItem("user") === null ? "Login" : "Logout"}
                 </Button>
-                {user ? 
+                {user ?
                     <a href={"/UserProfile/" + user.username}>
                         <img alt="header_profile_picture" src={Pepette} width="35px" height="35px" style={{ borderRadius: "50%", margin: "5px" }} />
                     </a>
