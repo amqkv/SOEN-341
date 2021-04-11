@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UserProfile from "../Components/Templates/UserProfile/UserProfile";
+import UserProfile, { checkFollow } from "../Components/Templates/UserProfile/UserProfile";
 
 import { render, screen } from '@testing-library/react';
 import axiosMock from 'axios';
@@ -21,22 +21,31 @@ describe("when a user's profile url is entered", () => {
         });
 });
 
-describe("when rendering", () => {
-    it("should fetch and display that specific user's posts only", () => {
-        // Rendering component
-        const username = "pooja";
-        localStorage.setItem("user", JSON.stringify({username: username}));
-        window.location.href = "/UserProfile/pooja";
-        ReactDOM.render(<UserProfile/>, document.createElement("div"));
-
-        let madeByVisitedUser = true;
-        axiosMock.post("http://localhost:5000/api/posts/getUserPosts", {username: username})
-            .then(res => {
-                for(let i = 0; i < res.data.length; i++){
-                    if(res.data[i].username !=  username)
-                        madeByVisitedUser = false;
-                }
-                expect(madeByVisitedUser);
-            })
-    })
-})
+// test("check folow", () => {
+//     const usernames = { currentUsername: "pooja", visitedUsername: "pooja" }
+//     const followersList = checkFollow().followersList;
+//     let follows = false;
+//     for(let i = 0; i < followersList.length; i++){
+//         if(followersList.includes("pooja")){
+//             follows = true; 
+//         }
+//     }
+//     expect(follows);
+// })
+// describe("when rendering", () => {
+//     it("should fetch and display that specific user's posts only", async () => {
+//         // Rendering component
+//         const username = "pooja";
+//         localStorage.setItem("user", JSON.stringify({username: username}));
+//         window.location.href = "/UserProfile/pooja";
+//         let madeByVisitedUser = true;
+//         axios.post("http://localhost:5000/api/posts/getUserPosts", {username: username})
+//             .then(res => {
+//                 for(let i = 0; i < res.data.length; i++){
+//                     if(res.data[i].username !=  username)
+//                         madeByVisitedUser = false;
+//                 }
+//                 expect(madeByVisitedUser);
+//             })
+//     })
+// })

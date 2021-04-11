@@ -52,14 +52,19 @@ router.post("/unfollow", (req, res) =>{
 //check if follow
 router.post("/checkfollow", (req, res)=>{
     console.log("check");
+    console.log(req.body)
     const userVisited = {"username": req.body.visitedUsername};
 
     //Fetches the arrays/list
     User.findOne(userVisited).then(userInfo => {
+        console.log("foudn user");
         const followersList = userInfo.followers;
         const followingList = userInfo.following;
+        console.log(userInfo);
+
         res.send({followersList: followersList, followingList: followingList})
     });
+    
 });
 
 module.exports = router;

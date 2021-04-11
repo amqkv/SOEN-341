@@ -17,6 +17,7 @@ import ProfileStats from './ProfileStats';
 //Gets the user profile to display it on top of page
 const user = JSON.parse(localStorage.getItem("user"));
 
+
 export default function UserProfile(props) {
 
     const [follows, setFollows] = useState();
@@ -53,7 +54,7 @@ export default function UserProfile(props) {
                 }
            })
            .catch(error => console.log(error));
-
+        
         axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
         .then(res => {
             console.log(res);
