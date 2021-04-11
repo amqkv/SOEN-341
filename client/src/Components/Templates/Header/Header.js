@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import {React, useReducer, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,9 +10,7 @@ import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
 import CreatePost from "../test_create_post_form";
 import logo from "../../../Images/Logo.png";
-import {FormControl, InputBase} from "@material-ui/core";
-import { Redirect } from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
+import Form from "react-bootstrap/Form";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
         width: "27px",
         color:"rgba(0, 0, 0, 0.6)"
     },
+    iconButton: {
+        padding: 10,
+    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -66,18 +67,19 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
 
     },
-    inputRoot: {
-        color: 'inherit',
+    root: {
+        padding: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
+        width: 400,
     },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
+    input: {
+        marginLeft: theme.spacing(1),
+        flex: 1,
+    },
+    divider: {
+        height: 28,
+        margin: 4,
     },
 }));
 
@@ -85,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
 
+    const [searchInput, setSearchInput] = useState("");
     const classes = useStyles();
     const { sections, title } = props;
     const [open, setOpen] = useState(false);
@@ -105,17 +108,21 @@ export default function Header(props) {
         window.location = "/login";
     }
 
-    const onChange = (event) => {
-        console.log(event.target.value);
-    };
-
-    const onSubmit = (event) => {
-        console.log("HELLO FROM SUBMIT",event.target.value);
-    }
 
     function handleCreate(){
         setOpen(!open);
     }
+
+    function handleSearch(e) {
+        e.preventDefault()
+        console.log(searchInput);
+        window.location = "/Search/" + searchInput;
+    }
+    function handleChange(e) {
+        const {name, value} = e.target;
+        setSearchInput(value);
+    }
+
 
     return (
         <div id="Header">
@@ -133,24 +140,21 @@ export default function Header(props) {
                     <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}><img width="250px" style={{paddingTop:"10px", marginLeft:"90px"}} src={logo} alt={props}/></a>
                 </Typography>
 
-                <FormControl onSubmit={onSubmit}>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <IconButton type="submit">
-                                <SearchIcon />
-                            </IconButton>
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                            onChange={onChange}
-                        />
-                    </div>
-                </FormControl>
+                <Form class="form-group" component="form" className={classes.root}>
+                    <Form.Group>
+                        <Form.Control
+                            class="form-group"
+                            type="text"
+                            className={classes.input}
+                            id="searchInput"
+                            onChange={handleChange}
+                            name="searchInput">
+                        </Form.Control>
+                    </Form.Group>
+                    <Button onClick={handleSearch}  type="submit" className={classes.iconButton} aria-label="search">
+                        <SearchIcon />
+                    </Button>
+                </Form>
 
                 <Button variant="outlined" size="small" onClick={login_logout}>
                     {localStorage.getItem("user") === null ? "Login" : "Logout"}

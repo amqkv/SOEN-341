@@ -182,14 +182,8 @@ export default function LoginTemplate(props){
                         <Form id="login_form" noValidate validated={loginValidated}>
                             <Form.Group>
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control 
-                                    id="loginEmail"
-                                    name="loginEmail"
-                                    onChange={handleChange} 
-                                    type="email" 
-                                    placeholder="Enter email"
-                                    required
-                                />
+                                <input name="searchInput" id="searchInput" type="text" className="form-control" placeholder="First name">
+                                </input>
                                 <Form.Control.Feedback type="invalid">
                                     Please enter a valid email.
                                 </Form.Control.Feedback>

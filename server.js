@@ -52,9 +52,8 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/posts", posts);
 app.use("/api/follow", follow);
-app.use("/ai/search", search);
-
-app.use("/api/comments", comments); 
+app.use("/api/search", search);
+app.use("/api/comments", comments);
 
 app.get("/", function (req, res){
   console.log("home page");

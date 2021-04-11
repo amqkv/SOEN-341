@@ -40,7 +40,7 @@ export default function Search(props) {
 
     const query = {currentUsername: JSON.parse(localStorage.getItem("user")).username, visitedUsername: window.location.href.split("/")[4]};
     const searchQuery = query.visitedUsername;
-    const queryEndpoint = "http://localhost:5000/api/search";
+
 
 
     // Checking the backend to see if the user is logged in
@@ -61,18 +61,21 @@ export default function Search(props) {
         setUserDisplays(filterSearch);
     });
 
-    const apiQuery =
-        axios.post(queryEndpoint, {query: searchQuery})
+
+    const queryEndpoint = "http://localhost:5000/api/search/";
+    /*const apiQuery =
+        axios.get(queryEndpoint)
             .then(res => {
                 console.log("Search response");
                 if(res.data.error){
                     setErrorMessage(res.data.error);
+                    console.log("***************", res.data.error)
                 }
                 else
                     console.log(res)
             })
 
-
+*/
     const noResults = <Container>
         <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
         <h2> No results found...</h2>

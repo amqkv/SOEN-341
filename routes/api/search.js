@@ -6,18 +6,18 @@ require('dotenv/config');
 router.get('/search', (req, res) => {
 
     console.log("Search route");
-    console.log(req.body);
+    //console.log(req.body);
 
-    const regex = "\/"
-    const searchQuery = regex.concat(req.body,regex);
-    console.log(searchQuery);
+    //const regex = "\/"
+    //const searchQuery = regex.concat(req.body,regex);
+    //console.log(searchQuery);
 
-    const userArray = User.find( { username: searchQuery}, 'username');
+    const userArray = User.find( {}, 'username');
 
     console.log(userArray)
 
 
-    res.send(userArray);
+     return res.status(200).json({ userArray });
 } )
 
 
