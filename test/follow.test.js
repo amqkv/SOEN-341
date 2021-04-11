@@ -1,7 +1,6 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 let server = require("../server");
-const follow = require("../routes/api/follow");
 const { expect } = require("chai");
 
 chai.should();
@@ -24,7 +23,6 @@ describe("follow API", () => {
                     expect(response.body.followersList).that.includes("dummy_a");
                     done();
                 })
-
         })
     })
 });
