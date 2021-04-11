@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 
 describe("follow API", () => {
 
-    // Test the checkfollow
+    // Testing the checkfollow endpoint
     describe("check follow request", () => {
         it("should return an object containing followers and following lists of dummy_b", (done) => {
             chai.request(server)
@@ -18,7 +18,6 @@ describe("follow API", () => {
                     if(err)
                         console.log(err);
                     response.should.have.status(200);
-                    // response.body.should.be.a('array')
                     expect(response.body.followingList).that.does.not.include("dummy_a");
                     expect(response.body.followersList).that.includes("dummy_a");
                     done();

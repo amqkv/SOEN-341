@@ -18,8 +18,6 @@ describe("posts API", () => {
                         if(err)
                             console.log(err);
                         response.should.have.status(200);
-                        // response.body.should.be.a('array')
-                        // console.log(response.body)
                         let isMadeByUser = true;
                         for(let i = 0; i < response.body.length; i++){
                             if(!response.body[i].username === "pooja.god"){

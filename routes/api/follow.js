@@ -49,7 +49,7 @@ router.post("/unfollow", (req, res) =>{
     res.send({success: "unfollow goodie"})
 });
 
-//check if follow
+// Checking if current user is following the visited user
 router.post("/checkfollow", (req, res)=>{
     console.log("check");
     console.log(req.body)
