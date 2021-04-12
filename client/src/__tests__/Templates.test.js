@@ -1,9 +1,13 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import HomePage from "../Components/Templates/HomePage/HomePage";
 import LoginTemplate from "../Components/Templates/Login/LoginTemplate";
 import UserProfile from "../Components/Templates/UserProfile/UserProfile";
 
+import logDummyUser from "../setupTests";
+import HomePage from "../Components/Templates/HomePage/HomePage";
+beforeEach(() => {
+    logDummyUser();
+})
 
 
 it("renders login page without crashing", () => {
@@ -12,14 +16,20 @@ it("renders login page without crashing", () => {
 });
 
 describe("when going on a user profile", () => {
-    if(localStorage.getItem("user") == null){
-        it("redirects to login page if not logged in", () => {
-            expect(window.location === "/login#redirect");
-        });
-    }else{
-        it("renders user profile page without crashing", () =>{
-            ReactDOM.render(<UserProfile/>, div);
-        });
-    }
+    localStorage.clear();
+    it("redirects to login page if not logged in", () => {
+        expect(window.location === "/login#redirect");
+    });
+    logDummyUser();
+    it("renders user profile page without crashing", () =>{
+        const div = document.createElement("div");
+        ReactDOM.render(<UserProfile/>, div);
+    });
 
-}) 
+
+})
+
+it("Load home page without crashing", function() {
+    const div = document.createElement("home");
+    ReactDOM.render(<HomePage/>, div);
+});

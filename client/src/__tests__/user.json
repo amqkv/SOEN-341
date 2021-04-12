@@ -1,0 +1,18 @@
+{
+  "followers": [
+    "test123",
+    "sitetester",
+    "demo"
+  ],
+  "following": [
+    "pooja.god",
+    "sitetester"
+  ],
+  "_id": "60479ab913c77350a828ace5",
+  "username": "sitetester",
+  "name": "baby pooja",
+  "email": "site@test.com",
+  "password": "$2a$10$oc4nQy265BJwHgiXHK0sQed.DJFRlalIUXCbsxiIP3bw/cssgI0Du",
+  "date": "2021-03-09T15:56:41.381Z",
+  "__v": 0
+}
