@@ -12,6 +12,8 @@ client/.eslintcache
 
 # testing
 /coverage
+client/coverage
+coverage
 
 # production
 /build
@@ -29,4 +31,4 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
-.eslintcache
+/client/coverage/

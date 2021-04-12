@@ -1,21 +1,26 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
-import HomePage from "../Components/Templates/HomePage/HomePage";
-import {mockComponent} from "react-dom/test-utils";
+import {HomePage} from '../Components/index';
+import ReactDOM from "react-dom";
+import {render, screen} from '@testing-library/react'
 
+import logDummyUser from "../setupTests";
+beforeEach(() => {
+    logDummyUser();
+})
 
-const request = require('supertest');
-const express = require('express');
-const userData = require('./user.json');
-
-
-const app = express();
 
 describe("post feed request", () => {
-    it("make a request to get the feed" , () => {
-        app.get('/api/post/getFeed', function (req, res) {
-            console.log(res.get('status'));
-            expect(res.get('status') === 200);
-        });
+    it("renders the homepage", () => {
+        const div = document.createElement("home");
+        ReactDOM.render(<HomePage/>, div);
+        ReactDOM.unmountComponentAtNode(div)
+    });
+    it("HomePage loads with posts in the feed that belong to the users on the follow list" , () => {
+        const postSpy = jest.spyOn(React, "useEffect");
+        const div = document.createElement("home");
+        ReactDOM.render(<HomePage/>, div);
+        expect(postSpy).toHaveBeenCalled();
+
+        postSpy.mockRestore();
     });
 });

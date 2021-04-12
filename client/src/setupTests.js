@@ -14,6 +14,8 @@ const localStorageMock = {
 };
 global.localStorage = localStorageMock;
 
+
+
 //log a user in
 export default function LogDummyUser() {
     //console.log(userData);

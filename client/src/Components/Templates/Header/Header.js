@@ -52,7 +52,7 @@ export default function Header(props) {
         if(localStorage.getItem("user") != null){
             localStorage.clear();
         }
-        window.location = "/login";
+        window.location.assign("/login");
     }
 
     function handleCreate(){
