@@ -14,42 +14,56 @@ export default function Search(props) {
 
     const [userDisplays, setUserDisplays] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const [users, setUsers] = useState([]);
 
 
-    const mockSearchQuery  = [
+    const mockSearchQuery = [
         "demo",
         "pooja.god",
         "mememan2",
         "sitetester",
         "tes555",
+        'sadasdasda',
+        'testing',
+        'testtest',
+        'testesttest',
+        'atestsetset',
+        'oopopopopop',
+        'asdasdasdasdas',
+        'asdasdasdas',
+        'sadasdasda',
+        'lakjsdlkasjdklj',
+        'kajshdkashd',
+        'asdasdas',
     ];
 
 
     const sections = [
-        { title: 'Please', url: '#' },
-        { title: 'Give', url: '#' },
-        { title: 'Us', url: '#' },
-        { title: 'A', url: '#' },
-        { title: 'Good', url: '#' },
-        { title: 'Grade', url: '#' },
-        { title: 'Because', url: '#' },
-        { title: 'We', url: '#' },
-        { title: 'Worked', url: '#' },
-        { title: 'Hard', url: '#' },
+        {title: 'Please', url: '#'},
+        {title: 'Give', url: '#'},
+        {title: 'Us', url: '#'},
+        {title: 'A', url: '#'},
+        {title: 'Good', url: '#'},
+        {title: 'Grade', url: '#'},
+        {title: 'Because', url: '#'},
+        {title: 'We', url: '#'},
+        {title: 'Worked', url: '#'},
+        {title: 'Hard', url: '#'},
     ];
 
-    const query = {currentUsername: JSON.parse(localStorage.getItem("user")).username, visitedUsername: window.location.href.split("/")[4]};
-    const searchQuery = query.visitedUsername;
-
+    const query = {
+        currentUsername: JSON.parse(localStorage.getItem("user")).username,
+        visitedUsername: window.location.href.split("/")[4]
+    };
 
 
     // Checking the backend to see if the user is logged in
     useEffect(() => {
-        if(localStorage.getItem("user") === null)
-            window.location = "/login#redirect";
+        if (localStorage.getItem("user") === null)
+            window.location.assign("/login#redirect");
     }, [])
 
-
+    const queryEndpoint = "http://localhost:5000/api/search/search";
 
 
     const filterSearch =
@@ -57,25 +71,25 @@ export default function Search(props) {
             return users.includes(query.visitedUsername.toLowerCase())
         })
 
+
+    /*async function getUsers() {
+        axios.get(queryEndpoint)
+            .then(res => {
+                for(let x = 0; x < res.data.length; x++) {
+                    users.push(res.data[x].username)
+                }
+            })
+        return users
+    }*/
+
     useEffect(() => {
         setUserDisplays(filterSearch);
     });
 
 
-    const queryEndpoint = "http://localhost:5000/api/search/";
-    /*const apiQuery =
-        axios.get(queryEndpoint)
-            .then(res => {
-                console.log("Search response");
-                if(res.data.error){
-                    setErrorMessage(res.data.error);
-                    console.log("***************", res.data.error)
-                }
-                else
-                    console.log(res)
-            })
 
-*/
+
+
     const noResults = <Container>
         <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
         <h2> No results found...</h2>

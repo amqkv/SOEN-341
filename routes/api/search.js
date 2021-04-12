@@ -12,12 +12,14 @@ router.get('/search', (req, res) => {
     //const searchQuery = regex.concat(req.body,regex);
     //console.log(searchQuery);
 
-    const userArray = User.find( {}, 'username');
-
-    console.log(userArray)
-
-
-     return res.status(200).json({ userArray });
+    User.find( {}, 'username').then( userArray => {
+        if (!userArray)
+            console.log("No users found")
+        else {
+            console.log(userArray);
+            return res.status(200).json(userArray);
+        }
+    })
 } )
 
 
