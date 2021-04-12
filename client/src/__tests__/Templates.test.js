@@ -17,18 +17,18 @@ it("renders login page without crashing", () => {
     ReactDOM.unmountComponentAtNode(div);
 });
 
-describe("when going on a user profile", () => {
+describe("Test UserProfile Component", () => {
     //Will make user be null so the redirect happens
     // we need to save the original object for later to not affect tests from other files
-    const realLocation = window.location
+    const realLocation = window.location;
     beforeAll(() => {
         delete window.location
         window.location = { assign: jest.fn(), href: realLocation.href }
-    })
+    });
     afterAll(() => {
         window.location = realLocation
-    })
-    it("redirects to login page if not logged in", () => {
+    });
+    it("userprofile page redirects to login page if not logged in", () => {
         localStorage.clear();
         render(<UserProfile/>);
         expect(window.location.assign).toHaveBeenCalled()
@@ -40,12 +40,29 @@ describe("when going on a user profile", () => {
         ReactDOM.unmountComponentAtNode(div);
     });
 })
-
-it("renders home page without crashing", function() {
-    const div = document.createElement("home");
-    ReactDOM.render(<HomePage/>, div);
-    ReactDOM.unmountComponentAtNode(div);
+describe("Test HomePage Component", () =>{
+    //Will make user be null so the redirect happens
+    // we need to save the original object for later to not affect tests from other files
+    const realLocation = window.location;
+    beforeAll(() => {
+        delete window.location
+        window.location = { assign: jest.fn(), href: realLocation.href }
+    });
+    afterAll(() => {
+        window.location = realLocation
+    });
+    it("homepage redirects to login page if not logged in", () => {
+        localStorage.clear();
+        render(<HomePage/>);
+        expect(window.location.assign).toHaveBeenCalled()
+    });
+    it("renders home page without crashing", function() {
+        const div = document.createElement("home");
+        ReactDOM.render(<HomePage/>, div);
+        ReactDOM.unmountComponentAtNode(div);
+    });
 });
+
 
 describe("Test Header Component", () => {
     const sections = [
@@ -88,6 +105,7 @@ describe("Test Header Component", () => {
         expect(spy).toBeCalled()
     });
 });
+
 it("renders footer without crashing", function() {
     const div = document.createElement("home");
     ReactDOM.render(<Footer/>, div);

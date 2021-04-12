@@ -33,14 +33,23 @@ export default function HomePage(props) {
 
     const [isLoading, setLoading] = useState(true);
     const [posts,setPosts] = useState([]);
-    const user = JSON.parse(localStorage.user)
+    let user = null;
     const classes = useStyles();
+
+    // Checking the backend to see if the user is logged in
+    if(localStorage.getItem("user") === null || undefined) {
+        window.location.assign("/login#redirect");
+        //return null;
+    }
+    else {
+        user = JSON.parse(localStorage.user)
+    }
 
     // Create Date references for filtering posts
     var now = new Date();
     
-    useEffect(() => {   
-
+    useEffect(() => {
+        if(user !== null){
         axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
         .then(res => { 
             // console.log(res.data)
@@ -60,7 +69,7 @@ export default function HomePage(props) {
             
         }).catch(error => { console.log(error) });
         
-      }, []);
+      }}, []);
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
