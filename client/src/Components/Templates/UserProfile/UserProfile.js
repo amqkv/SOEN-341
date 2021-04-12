@@ -69,50 +69,50 @@ const post1 =
     />
 
 const posts = [post1];
-    //Gets the user profile to display it on top of page
-    const user = JSON.parse(localStorage.getItem("user"));
-    //console.log(user);
+//Gets the user profile to display it on top of page
+const user = JSON.parse(localStorage.getItem("user"));
+//console.log(user);
 
-    // User's past posts 
-    const tileData = [
-        {
-            img: meme_man,
-            title: 'meme man',
-            author: user ? user.username : "",
-        },
-        {
-            img: harold,
-            title: 'harold',
-            author: user ? user.username : "",
-        },
-        {
-            img: pikachu,
-            title: 'shocked pikachu',
-            author: user ? user.username : "",
-        },
-        {
-            img: pepega,
-            title: 'pepega',
-            author: user ? user.username : "",
-        },
-        {
-            img: harold,
-            title: 'harold',
-            author: user ? user.username : "",
-        },
-        {
-            img: pikachu,
-            title: 'shocked pikachu',
-            author: user ? user.username : "",
-        },
-    ];
+// User's past posts
+const tileData = [
+    {
+        img: meme_man,
+        title: 'meme man',
+        author: user ? user.username : "",
+    },
+    {
+        img: harold,
+        title: 'harold',
+        author: user ? user.username : "",
+    },
+    {
+        img: pikachu,
+        title: 'shocked pikachu',
+        author: user ? user.username : "",
+    },
+    {
+        img: pepega,
+        title: 'pepega',
+        author: user ? user.username : "",
+    },
+    {
+        img: harold,
+        title: 'harold',
+        author: user ? user.username : "",
+    },
+    {
+        img: pikachu,
+        title: 'shocked pikachu',
+        author: user ? user.username : "",
+    },
+];
 
-    //const profile = getFromBackend();
-    const profile = {
-        posts: tileData.length,
-        followers: 51289,
-        following: 9687
-    }
+//const profile = getFromBackend();
+const profile = {
+    posts: tileData.length,
+    followers: 51289,
+    following: 9687
+}
 
 export default function UserProfile(props) {
 
@@ -120,104 +120,108 @@ export default function UserProfile(props) {
     const [user, setUser] = useState();
 
     const classes = useStyles();
+    let usernameS = {
+        currentUsername: "",
+        visitedUsername: ""
+    };
 
     // Checking the backend to see if the user is logged in
     if(localStorage.getItem("user") === null || undefined) {
         window.location.assign("/login#redirect");
-        return null;
+        //return null;
     }
     else {
-
-        const usernameS = {
+        usernameS = {
             currentUsername: JSON.parse(localStorage.getItem("user")).username,
             visitedUsername: window.location.href.split("/")[4]
         };
-
-        //Check if user already follows the other
-        useEffect(() => {
-            axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
-                .then(res => {
-                    if (res.data.followersList.includes(usernameS.currentUsername)) {
-                        //show unfollow
-                        setFollows(true);
-                    } else {
-                        //show follow
-                        setFollows(false);
-                    }
-                })
-                .catch(error => console.log(error));
-
-            axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
-                .then(res => {
-                    console.log(res);
-                    setUser(res.data.user);
-                })
-        }, [])
-
-        function handleFollow() {
-            axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
-                .then(res => {
-                    setFollows(!follows);
-                    axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
-                        .then(res => {
-                            setUser(res.data.user);
-                        })
-                        .catch(error => console.log(error));
-                })
-                .catch(error => console.log(error));
-
-        }
-
-        console.log(props.currentUser);
-        return !user ? null : (
-            <div>
-                <CssBaseline/>
-                <Container maxWidth="lg">
-                    <Header title="MemeSpace" sections={sections} currentUser={props.currentUser}/>
-                    <feed>
-                        <h1 style={{fontWeight: "550"}}>{window.location.href.split("/")[4]}</h1>
-                        <div className="profile-stats">
-                            <ProfileStats posts={profile.posts} followers={user.followers.length}
-                                          following={user.following.length}/>
-                        </div>
-                        <Container>
-                            <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
-                        </Container>
-                        <Grid container className={classes.mainGrid}>
-                            <PostFeed title="Profile Page" posts={posts}/>
-                        </Grid>
-
-                    </feed>
-                </Container>
-                <Container>
-                    <br></br>
-                    <h3>Browse olders memes from {user ? user.username : ""}</h3>
-
-                    <div className={classes.root}>
-                        <GridList cellHeight={180} className={classes.gridList}>
-                            <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
-                                {/* <ListSubheader component="div">{user.username + "'s"} past memes</ListSubheader> */}
-                            </GridListTile>
-                            {tileData.map((tile) => (
-                                <GridListTile key={tile.img}>
-                                    <img src={tile.img} alt={tile.title}/>
-                                    <GridListTileBar
-                                        title={tile.title}
-                                        subtitle={<span>by: {tile.author}</span>}
-                                        actionIcon={
-                                            <IconButton aria-label={`info about ${tile.title}`}
-                                                        className={classes.icon}>
-                                                <InfoIcon/>
-                                            </IconButton>
-                                        }
-                                    />
-                                </GridListTile>
-                            ))}
-                        </GridList>
-                    </div>
-                </Container>
-                <Footer title="Footer" description="This is a footer"/>
-            </div>
-        );
     }
+
+
+    //Check if user already follows the other
+    useEffect(() => {
+        axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
+            .then(res => {
+                if (res.data.followersList.includes(usernameS.currentUsername)) {
+                    //show unfollow
+                    setFollows(true);
+                } else {
+                    //show follow
+                    setFollows(false);
+                }
+            })
+            .catch(error => console.log(error));
+
+        axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
+            .then(res => {
+                console.log(res);
+                setUser(res.data.user);
+            })
+    }, [])
+
+    function handleFollow() {
+        axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
+            .then(res => {
+                setFollows(!follows);
+                axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
+                    .then(res => {
+                        setUser(res.data.user);
+                    })
+                    .catch(error => console.log(error));
+            })
+            .catch(error => console.log(error));
+
+    }
+
+    console.log(props.currentUser);
+    return !user ? null : (
+        <div>
+            <CssBaseline/>
+            <Container maxWidth="lg">
+                <Header title="MemeSpace" sections={sections} currentUser={props.currentUser}/>
+                <feed>
+                    <h1 style={{fontWeight: "550"}}>{window.location.href.split("/")[4]}</h1>
+                    <div className="profile-stats">
+                        <ProfileStats posts={profile.posts} followers={user.followers.length}
+                                      following={user.following.length}/>
+                    </div>
+                    <Container>
+                        <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
+                    </Container>
+                    <Grid container className={classes.mainGrid}>
+                        <PostFeed title="Profile Page" posts={posts}/>
+                    </Grid>
+
+                </feed>
+            </Container>
+            <Container>
+                <br></br>
+                <h3>Browse olders memes from {user ? user.username : ""}</h3>
+
+                <div className={classes.root}>
+                    <GridList cellHeight={180} className={classes.gridList}>
+                        <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
+                            {/* <ListSubheader component="div">{user.username + "'s"} past memes</ListSubheader> */}
+                        </GridListTile>
+                        {tileData.map((tile) => (
+                            <GridListTile key={tile.img}>
+                                <img src={tile.img} alt={tile.title}/>
+                                <GridListTileBar
+                                    title={tile.title}
+                                    subtitle={<span>by: {tile.author}</span>}
+                                    actionIcon={
+                                        <IconButton aria-label={`info about ${tile.title}`}
+                                                    className={classes.icon}>
+                                            <InfoIcon/>
+                                        </IconButton>
+                                    }
+                                />
+                            </GridListTile>
+                        ))}
+                    </GridList>
+                </div>
+            </Container>
+            <Footer title="Footer" description="This is a footer"/>
+        </div>
+    );
 }
