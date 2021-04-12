@@ -39,38 +39,6 @@ router.post("/editEmail", (req, res) => {
     })
 });
 
-
-// POST for changing username
-router.post("/editUsername", (req, res) => {
-    console.log("edit username");
-    console.log(req.body.username);
-    console.log(req.body.newUsername);
-    console.log(req.body.password);
-
-    User.find({$or: [{"username": req.body.username}, {"username": req.body.newUsername}]}).then(user => {
-        console.log(user)
-        if(user.length > 1){
-            res.send({error: "That username is already taken."})
-        }
-        else{
-            bcrypt.compare(req.body.password, user[0].password).then(isMatch => {
-                if(isMatch){
-                    User.updateOne({"username" : req.body.username}, {"username": req.body.newUsername}, {upsert: true}, (err, results) => {
-                        if(err){
-                            res.send({error: "An error occured, please try again later."});
-                        }
-                        else
-                            res.send({ success: "Username successfully changed" })
-                    })
-                }
-                else{
-                    res.send({ error: "Password is incorrect" });
-                }
-            })
-        }
-    })
-});
-
 // POST for changing password
 router.post("/editPassword", (req, res) => {
     console.log("edit password")

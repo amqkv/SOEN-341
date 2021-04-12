@@ -13,7 +13,7 @@ export default function EditAccountPopup(props) {
     const user = JSON.parse(localStorage.getItem("user"));
     
     const [editEmail, setEditEmail] = useState("");
-    const [editUsername, setEditUsername] = useState("");
+    // const [editUsername, setEditUsername] = useState("");
 
     const [editOldPassword, setEditOldPassword] = useState("");
     const [editNewPassword, setEditNewPassword] = useState("");
@@ -23,7 +23,6 @@ export default function EditAccountPopup(props) {
     const { onClose, selectedValue, open } = props;
 
     const [editEmailValidated, setEditEmailValidated] = useState(false);
-    const [editUsernameValidated, setEditUsernameValidated] = useState(false);
     const [editPasswordValidated, setEditPasswordValidated] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
@@ -42,9 +41,6 @@ export default function EditAccountPopup(props) {
         switch (name) {
             case "editEmail":
                 setEditEmail(value);
-                break;
-            case "editUsername":
-                setEditUsername(value);
                 break;
             case "editOldPassword":
                 setEditOldPassword(value);
@@ -97,41 +93,6 @@ export default function EditAccountPopup(props) {
         }
     }
 
-    //Handling of edit username
-    function handleEditUsername(e) {
-        if(editUsername.length < 5 || editOldPassword.length < 8) {
-            e.preventDefault();
-            e.stopPropagation();
-            setEditUsernameValidated(true);
-            if(editUsername.length < 5)
-                document.getElementById("editUsername").classList.add("is-invalid");
-            if(editOldPassword.length < 8)
-                document.getElementById("editOldUsernamePassword").classList.add("is-invalid");
-        }
-        if(editUsername === user.username){
-            setErrorMessage("This is already your username stoopid");
-            setSuccessMessage("");
-        }
-        // POST form input data to backend
-        else{
-            axios.post("http://localhost:5000/api/edit/editUsername", {newUsername: editUsername, password: editOldPassword, username: user.username})
-            .then(res => {
-                console.log(res);
-                if(res.data.success){
-                    setErrorMessage("");
-                    setSuccessMessage(res.data.success);
-                    user.username = editUsername;
-                    localStorage.setItem("user", JSON.stringify(user));
-                    window.location.href= "/UserProfile/" + editUsername;
-                }
-                else if(res.data.error){
-                    setSuccessMessage("")
-                    setErrorMessage(res.data.error);
-                }
-            })
-            .catch(err => console.log(err));
-        }
-    }
 
     // Handling of edit password
     function handleEditPassword(e) {
@@ -209,36 +170,6 @@ export default function EditAccountPopup(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Button onClick={handleEditEmail} variant="info" >Submit</Button>
-                    </Form>
-                </Tab>
-                {/* Form to change sername */}
-                <Tab eventKey="editUsername" title="Change Username">
-                    <Form id="edit_account_form" validated={setEditUsernameValidated}>
-                        <Form.Group>
-                            <Form.Control
-                                name="editUsername"
-                                id="editUsername"
-                                onChange={handleChange}
-                                type="text"
-                                placeholder="New Username"
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Username must be at least 5 characters.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Control
-                                name="editOldPassword"
-                                id="editOldUsernamePassword"
-                                onChange={handleChange}
-                                type="password"
-                                placeholder="Old Password"
-                            />  
-                            <Form.Control.Feedback type="invalid">
-                                Password must be at least 8 characters.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Button onClick={handleEditUsername} variant="info">Submit</Button>
                     </Form>
                 </Tab>
                 {/* Form to change password */}
