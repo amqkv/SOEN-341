@@ -10,21 +10,45 @@ import Pepette from "../../../Images/sad_pepette.jpg";
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import ViewPostPopup from "../Post/ViewPostPopup";
+import EditAccountPopup from "../edit_account_form";
 
 import {Header, Footer} from '../../index';
 import ProfileStats from './ProfileStats';
 
-//Gets the user profile to display it on top of page
-const user = JSON.parse(localStorage.getItem("user"));
-
+// Styling for the material UI components 
+const useStyles = makeStyles((theme) => ({
+    editContainer: {
+        marginBottom: "3%"
+    },
+    mainGrid: {
+        marginTop: theme.spacing(1),
+    },
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+    },
+    gridList: {
+        width: 500,
+        height: 450,
+    },
+    icon: {
+        color: 'rgba(255, 255, 255, 0.54)',
+    },
+    followBtnContainer: {
+        marginBottom: "0.5%"
+    }
+}));
 
 export default function UserProfile(props) {
-
+    const classes = useStyles();
     const [follows, setFollows] = useState();
     const [user, setUser] = useState();
     const [posts, setPosts] = useState([]);
     const [openPost, setOpenPost] = useState(false);
     const [postViewed, setPostViewed] = useState();
+    const [open, setOpen] = useState(false);
 
     // Checking the backend to see if the user is logged in
     useEffect(() => {
@@ -58,6 +82,9 @@ export default function UserProfile(props) {
         axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
         .then(res => {
             console.log(res);
+            if(res.data.error){
+                window.location.href = "/Home/#";
+            }
             setUser(res.data.user);
         })
     }, []);
@@ -91,20 +118,33 @@ export default function UserProfile(props) {
         setPostViewed(post);
         setOpenPost(!openPost);
     }
+
+    function handleOpen(){
+        setOpen(!open);
+    }
+
+    console.log(props.currentUser);
     return !user ? null : (
         <div>
             {openPost ? <ViewPostPopup open={openPost} onClose={handleViewPost} post={postViewed}/> : null}
-            {/* Header section of the user profile containing user's stats */}
+            {open ? <EditAccountPopup open={open} onClose={handleOpen}/> : null}
             <Container maxWidth="lg">
                 <Header title="MemeSpace" />
+                {/* Profile information (name, number of posts/followers/following)  */}
                     <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
                     <div className="profile-picture-container">
                         <img alt="Profile Avatar" className="profile-picture" src={Pepette} height="150px" width="150px"/>
                     </div>
-                        <ProfileStats posts={posts} user={user || null}/>
-                    <Container style={{marginBottom:"4%"}}>
+                    <ProfileStats posts={posts} user={user || null}/>
+                    <Container className={classes.followBtnContainer}>
                         <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
                     </Container>
+                    {usernameS.currentUsername === usernameS.visitedUsername ? 
+                        <Container className={classes.editContainer}>
+                            <Button onClick={handleOpen} variant="secondary" >Edit Account</Button>
+                        </Container>
+                        :
+                        null}  
             </Container>
             {/* Feed containing all of visited user's posts */}
             <Container>
