@@ -136,5 +136,45 @@ router.get("/getFeed",(async function (req, res) {
     }
 }));
 
+router.get("/getOlderFeed",(async function (req, res) {
+    try {
+    
+        // Get user data
+        var user_data = await User.find({ '_id': req.query.userID });
+
+        // Perpare following list date limit
+        var now = new Date(req.query.forwardDateLimit)
+        var two_days_ago = new Date(now.setDate(now.getDate()-2));
+
+        // Fetch posts of followers within the last 2 days
+        var relevant_posts = await Post.find({'username': { $in: user_data[0].following }, 'date':{ $lte: two_days_ago}}).sort({ date: -1 }).limit(max_posts_in_feed);
+
+        // If the amount of posts smaller than limit, fetch random feeds to compensate
+        if ( relevant_posts.length < 10 ){
+
+            var random_recent_posts = []
+            var selected_post_ids = []
+            let i = 0
+
+            for (i = 0; i < relevant_posts.length; i++){
+                selected_post_ids.push(relevant_posts[i]['_id'])
+            }
+            
+            random_recent_posts = await Post.find({'_id': { $nin: selected_post_ids }, 'date':{ $lte: two_days_ago}}).sort({ date: -1 }).limit(max_posts_in_feed - relevant_posts.length);
+            relevant_posts = relevant_posts.concat(random_recent_posts);
+
+        }
+        console.log("!!!!!")
+        console.log(relevant_posts.length)
+        var posts_data = await fetch_posts_data(relevant_posts)
+        res.json(posts_data)
+
+    } catch(err) {
+        // An error occurred when fetching 
+        console.log(err)
+        return
+    }
+}));
+
 
 module.exports = router;

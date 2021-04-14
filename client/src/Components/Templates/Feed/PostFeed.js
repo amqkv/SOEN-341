@@ -6,9 +6,11 @@ import Divider from '@material-ui/core/Divider';
 
 export default function PostFeed(props) {
     const {posts} = props;
-    console.log(posts);
+
+
+
     return (
-        <Grid container direction="column" justify="center" alignItems="center" spacing={5} >
+        <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
             {/* <img src={logo} alt={title}/> */}
             <Divider />
             {posts.map((post) => (
