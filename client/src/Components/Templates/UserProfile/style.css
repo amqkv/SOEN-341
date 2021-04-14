@@ -1,5 +1,6 @@
 #mainBox {
     column-count: 3;
     column-gap: 0px;
-    font-size: 18px;
+    font-size: 23px;
+    margin-bottom: 15px;
 }
