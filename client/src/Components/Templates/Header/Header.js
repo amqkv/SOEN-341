@@ -11,6 +11,7 @@ import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
 import CreatePost from "../test_create_post_form";
 import logo from "../../../Images/Logo.png";
+import ProfileIcon from '../UserProfile/UserProfileIcon';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +84,9 @@ export default function Header(props) {
                 </Button>
                 {user ? 
                     <a href={"/UserProfile/" + user.username}>
-                        <img alt="header_profile_picture" src={Pepette} width="35px" height="35px" style={{ borderRadius: "50%", margin: "5px" }} />
+                        <div  style={{width:"35px", height:"35px", display: "inline-block", borderRadius: "50%", margin: "5px", overflow : "hidden", verticalAlign: "middle" }}>
+                            <ProfileIcon></ProfileIcon>
+                        </div>
                     </a>
                     : null
                 }
