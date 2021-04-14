@@ -8,13 +8,21 @@ import Container from '@material-ui/core/Container';
 import {Post, Header, PostFeed, Footer} from '../../../Components/index';
 import axios from 'axios';
 import './style.css';
+import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
         marginTop: theme.spacing(3),
     },
+    root: {
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+    },
 }));
+
 
 const sections = [
     { title: 'Please', url: '#' },
@@ -28,6 +36,7 @@ const sections = [
     { title: 'Worked', url: '#' },
     { title: 'Hard', url: '#' },
 ];
+  
 
 //Combine this with backend DB
 export default function HomePage(props) {
@@ -39,7 +48,7 @@ export default function HomePage(props) {
 
     const user = JSON.parse(localStorage.user)
     const classes = useStyles();
-
+    const [openAlert, setOpenAlert] = useState(false);
     // Create Date references for filtering posts
     var now = new Date();
     var updated_posts = []
@@ -109,16 +118,30 @@ export default function HomePage(props) {
                     )
             }
             setLoading(false);
+            
+        }).catch(error => { console.log(error) });
+        
+    }, []);
 
-        }).catch(error => { console.log(error) });   
-      }, []);
+    useEffect(() => {
+        if(window.location.href.includes("#"))
+            setOpenAlert(true);
+    }, []);
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
     
     return (
-        <div >
+        <div>
+            {openAlert ? 
+                <div className={classes.root}>
+                    <Alert severity="error" onClose={() => {setOpenAlert(false)}}>That user does not exist!</Alert>
+                </div>
+                :
+                null
+            }
+
             <CssBaseline />
             <Container maxWidth="lg" >
                 <Header title="MemeSpace" sections={sections} />

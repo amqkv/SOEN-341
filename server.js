@@ -14,6 +14,8 @@ const users = require("./routes/api/users");
 const posts = require("./routes/api/posts");
 const follow = require("./routes/api/follow");
 const comments = require("./routes/api/comments");
+const edit = require("./routes/api/edit");
+const search = require("./routes/api/search");
 
 const app = express();
 
@@ -51,8 +53,11 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/posts", posts);
 app.use("/api/follow", follow);
+app.use("/api/search", search);
+app.use("/api/comments", comments);
+app.use("/api/edit", edit);
 
-app.use("/api/comments", comments); 
+app.use("/api/comments", comments);
 
 app.get("/", function (req, res){
   console.log("home page");
@@ -63,5 +68,4 @@ const port = 5000;
 
 app.listen(port, () => console.log("\nServer up and running on port " + port + "!!"));
 
-
-
+module.exports = app;
