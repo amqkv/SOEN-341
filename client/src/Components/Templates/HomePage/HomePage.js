@@ -53,7 +53,16 @@ export default function HomePage(props) {
     var now = new Date();
     var updated_posts = []
 
-
+    function findOldestDate() {
+        let oldestDate = new Date()
+        for(let x = 0; x < current_posts.length; x++){
+            let entry = new Date(current_posts[x]['props']['date'])
+            if (entry < oldestDate){
+                oldestDate = entry
+            }
+        }
+        return oldestDate
+    }
     function handleScroll() {
 
         const scrollTop = window.scrollY;
@@ -61,7 +70,8 @@ export default function HomePage(props) {
 
 
             setLoaderDisplay("block")
-            var forwardLimit = new Date(current_posts[current_posts.length - 1]['props']['date'])
+            var forwardLimit = findOldestDate()
+            console.log("!!!!!!!!",forwardLimit)
             setCurrentPosts(current_posts);
 
             axios.get("/api/posts/getOlderFeed",{params: { userID: user["_id"] , forwardDateLimit: forwardLimit}})
