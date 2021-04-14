@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import {Post, Header, PostFeed, Footer} from '../../../Components/index';
 import axios from 'axios';
-
+import './style.css';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,38 +33,43 @@ const sections = [
 export default function HomePage(props) {
 
     const [isLoading, setLoading] = useState(true);
-    const [posts,setPosts] = useState([]);
+    const [loaderDisplay, setLoaderDisplay] = useState("None")
+    const [current_posts,setCurrentPosts] = useState([]);
+
 
     const user = JSON.parse(localStorage.user)
     const classes = useStyles();
 
     // Create Date references for filtering posts
     var now = new Date();
+    var updated_posts = []
+
 
     function handleScroll() {
-        const scrollTop = window.scrollY;
-        if (scrollTop + window.innerHeight >= document.body.offsetHeight){
-            console.log("Loading older stuff")
 
-            var forwardLimit = new Date()
-            forwardLimit.setDate(forwardLimit.getDate() - 10)
-            setLoading(true);
+        const scrollTop = window.scrollY;
+        if (scrollTop + window.innerHeight >= document.body.offsetHeight && loaderDisplay == "None"){
+
+
+            setLoaderDisplay("block")
+            var forwardLimit = new Date(current_posts[current_posts.length - 1]['props']['date'])
+            setCurrentPosts(current_posts);
+
             axios.get("/api/posts/getOlderFeed",{params: { userID: user["_id"] , forwardDateLimit: forwardLimit}})
             .then(res => { 
-                // console.log(res.data)
+                
                 for(let x = 0; x < res.data.length; x++){
-                    // console.log(res.data[x]['date'])
+
                     let insert = true
-                    for (let j = 0; j<posts.length; j++){
-                        if (posts[j].props.postID == res.data[x]['postID']){
+                    for (let j = 0; j<current_posts.length; j++){
+                        if (current_posts[j].props.postID == res.data[x]['postID']){
                             insert = false
                             break;
                         }
                     }
 
                     if (insert){
-
-                        posts.push(<Post 
+                        current_posts.push(<Post 
                             author={ res.data[x]['username'] }
                             date={ res.data[x]['date'] }
                             base64img={res.data[x]['image']['file']}
@@ -75,24 +80,25 @@ export default function HomePage(props) {
                         )
 
                     }
+                    
                 }
-                setLoading(false);
+                setCurrentPosts(current_posts);
+                setLoaderDisplay("None");
             }).catch(error => { console.log(error) });   
         }
-
     }
 
     useEffect(() => {   
 
 
         window.addEventListener('scroll', handleScroll);
-
+        setLoading(true);
         axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
         .then(res => { 
             // console.log(res.data)
             for(let x = 0; x < res.data.length; x++){
                 // console.log(res.data[x]['date'])
-                posts.push(<Post 
+                current_posts.push(<Post 
                         author={ res.data[x]['username'] }
                         date={ res.data[x]['date'] }
                         base64img={res.data[x]['image']['file']}
@@ -103,7 +109,7 @@ export default function HomePage(props) {
                     )
             }
             setLoading(false);
-            
+
         }).catch(error => { console.log(error) });   
       }, []);
 
@@ -118,10 +124,11 @@ export default function HomePage(props) {
                 <Header title="MemeSpace" sections={sections} />
                 <feed>
                     <Grid container className={classes.mainGrid} direction="column">
-                        <PostFeed title="The Meme Feed" posts={posts}/>
+                        <PostFeed title="The Meme Feed" posts={current_posts}/>
                     </Grid>
                 </feed>
             </Container>
+            <div class="loader" style={{display: loaderDisplay }}></div>
             <Footer title="Footer" description="This is a footer :^)" />
         </div>
     );
