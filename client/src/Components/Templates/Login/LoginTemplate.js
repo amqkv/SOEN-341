@@ -75,10 +75,7 @@ export default function LoginTemplate(props){
                     }
                 })
                 .catch(error => { console.log(error) });
-            setLoginEmail("");
-            setLoginPw("");
         }
-
     }
 
     // Register form validation
