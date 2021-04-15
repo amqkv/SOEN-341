@@ -1,6 +1,7 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 let server = require("../server");
+const posts = require("../routes/api/posts");
 const { expect } = require("chai");
 const bcrypt = require("bcryptjs");
 
@@ -15,11 +16,7 @@ chai.use(chaiHttp);
 describe("edit API", () => {
 
     beforeEach(()=>{
-        sandbox.stub(process.env, 'DB_CONNECTION').value('fake db');
-        sandbox.stub(process.env, 'AWS_ACCESS_KEY_ID').value('fake aws access key');
-        sandbox.stub(process.env, 'AWS_SECRET_ACCESS_KEY').value('fake aws secret key');
-        sandbox.stub(process.env, 'S3_BUCKET').value('fake bucket');
-        sandbox.stub(process.env, 'secretOrKey').value('fake key');
+        sandbox.mock(posts)
     })
 
     // Testing the editEmail endpoint
