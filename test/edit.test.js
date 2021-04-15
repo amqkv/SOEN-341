@@ -1,24 +1,23 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
-let server = require("../server");
-const posts = require("../routes/api/posts");
+
+let proxyquire = require('proxyquire')
+    , pathStub = {};
+let server = proxyquire('../server', {'posts': pathStub});
+//let server = require("../server");
+
 const { expect } = require("chai");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
 
-const sinon = require('sinon');
-let sandbox = sinon.createSandbox();
+
 
 chai.should();
 chai.use(chaiHttp);
 
 describe("edit API", () => {
-
-    beforeEach(()=>{
-        sandbox.mock(posts)
-    })
-
+    pathStub.posts = {};
     // Testing the editEmail endpoint
     describe("edit email request", () => {
         describe("when the correct password is entered", () => {
