@@ -36,8 +36,10 @@ export default function LoginTemplate(props){
             window.location = "/UserProfile/" + JSON.parse(localStorage.getItem("user")).username;
         }
         // Display the error message if the user was trying to access a page without logging in
-        if(window.location.hash === "#redirect")
-            setErrorMessage("You need log in to view that page!");
+        if(window.location.hash === "#redirect"){
+            setSuccessMessage("");
+            setErrorMessage("You need to log in to view that page!");
+        }
     }, [])
 
     // Login form validation
@@ -67,15 +69,13 @@ export default function LoginTemplate(props){
                         // Clear the input fields + set the state to the current user + redirect to user's profile
                         document.getElementById("login_form").reset();
                         setErrorMessage("");
+                        
                         localStorage.setItem("user", JSON.stringify(res.data.user));
                         window.location = "/UserProfile/" + res.data.user.username;
                     }
                 })
                 .catch(error => { console.log(error) });
-            setLoginEmail("");
-            setLoginPw("");
         }
-
     }
 
     // Register form validation
@@ -182,11 +182,11 @@ export default function LoginTemplate(props){
                         <Form id="login_form" noValidate validated={loginValidated}>
                             <Form.Group>
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control 
+                                <Form.Control
                                     id="loginEmail"
                                     name="loginEmail"
-                                    onChange={handleChange} 
-                                    type="email" 
+                                    onChange={handleChange}
+                                    type="email"
                                     placeholder="Enter email"
                                     required
                                 />

@@ -3,3 +3,19 @@
     column-gap: 0px;
     font-size: 18px;
 }
+
+.profile-picture-container{
+    width: 100%;
+    text-align: center !important;
+}
+
+.profile-picture{
+    display: block;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px 2px rgba(64,60,67,.16);
+    padding: 3px;
+    margin-bottom: 5px;
+    font-size: 23px;
+    margin-bottom: 15px;
+}
