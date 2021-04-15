@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import Button from 'react-bootstrap/Button'
 import axios from 'axios';
+import EditAccountPopup from "../edit_account_form";
 
 import {Header, PostFeed, Footer, Post} from '../../index';
 import ProfileStats from './ProfileStats';
@@ -26,6 +27,9 @@ import pikachu from '../../../Images/shocked pikachu.png';
 
 
 const useStyles = makeStyles((theme) => ({
+    editContainer: {
+        margin: "5px"
+    },
     mainGrid: {
         marginTop: theme.spacing(3),
     },
@@ -69,55 +73,56 @@ const post1 =
     />
 
 const posts = [post1];
-//Gets the user profile to display it on top of page
-const user = JSON.parse(localStorage.getItem("user"));
-//console.log(user);
+    //Gets the user profile to display it on top of page
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(user);
 
-// User's past posts
-const tileData = [
-    {
-        img: meme_man,
-        title: 'meme man',
-        author: user ? user.username : "",
-    },
-    {
-        img: harold,
-        title: 'harold',
-        author: user ? user.username : "",
-    },
-    {
-        img: pikachu,
-        title: 'shocked pikachu',
-        author: user ? user.username : "",
-    },
-    {
-        img: pepega,
-        title: 'pepega',
-        author: user ? user.username : "",
-    },
-    {
-        img: harold,
-        title: 'harold',
-        author: user ? user.username : "",
-    },
-    {
-        img: pikachu,
-        title: 'shocked pikachu',
-        author: user ? user.username : "",
-    },
-];
+    // User's past posts 
+    const tileData = [
+        {
+            img: meme_man,
+            title: 'meme man',
+            author: user ? user.username : "",
+        },
+        {
+            img: harold,
+            title: 'harold',
+            author: user ? user.username : "",
+        },
+        {
+            img: pikachu,
+            title: 'shocked pikachu',
+            author: user ? user.username : "",
+        },
+        {
+            img: pepega,
+            title: 'pepega',
+            author: user ? user.username : "",
+        },
+        {
+            img: harold,
+            title: 'harold',
+            author: user ? user.username : "",
+        },
+        {
+            img: pikachu,
+            title: 'shocked pikachu',
+            author: user ? user.username : "",
+        },
+    ];
 
-//const profile = getFromBackend();
-const profile = {
-    posts: tileData.length,
-    followers: 51289,
-    following: 9687
-}
+    //const profile = getFromBackend();
+    const profile = {
+        posts: tileData.length,
+        followers: 51289,
+        following: 9687
+    }
 
 export default function UserProfile(props) {
 
     const [follows, setFollows] = useState();
     const [user, setUser] = useState();
+    const [open, setOpen] = useState(false);
 
     const classes = useStyles();
     let usernameS = {
@@ -153,10 +158,13 @@ export default function UserProfile(props) {
             .catch(error => console.log(error));
 
         axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
-            .then(res => {
-                console.log(res);
-                setUser(res.data.user);
-            })
+        .then(res => {
+            console.log(res);
+            if(res.data.error){
+                window.location.href = "/Home/#";
+            }
+            setUser(res.data.user);
+        })
     }, [])
 
     function handleFollow() {
@@ -173,23 +181,35 @@ export default function UserProfile(props) {
 
     }
 
+    function handleOpen(){
+        setOpen(!open);
+    }
+
+
     console.log(props.currentUser);
     return !user ? null : (
         <div>
             <CssBaseline/>
+            {open ? <EditAccountPopup open={open} onClose={handleOpen}/> : null}
+            <CssBaseline />
             <Container maxWidth="lg">
-                <Header title="MemeSpace" sections={sections} currentUser={props.currentUser}/>
+                <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
                 <feed>
-                    <h1 style={{fontWeight: "550"}}>{window.location.href.split("/")[4]}</h1>
+                    <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
                     <div className="profile-stats">
-                        <ProfileStats posts={profile.posts} followers={user.followers.length}
-                                      following={user.following.length}/>
+                        <ProfileStats posts={profile.posts} followers={user.followers.length} following={user.following.length} />
                     </div>
                     <Container>
                         <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
                     </Container>
+                    {usernameS.currentUsername === usernameS.visitedUsername ?
+                        <Container className={classes.editContainer}>
+                            <Button onClick={handleOpen} variant="secondary" >Edit Account</Button>
+                        </Container>
+                        :
+                        null}
                     <Grid container className={classes.mainGrid}>
-                        <PostFeed title="Profile Page" posts={posts}/>
+                        <PostFeed title="Profile Page" posts={posts} />
                     </Grid>
 
                 </feed>
@@ -200,19 +220,18 @@ export default function UserProfile(props) {
 
                 <div className={classes.root}>
                     <GridList cellHeight={180} className={classes.gridList}>
-                        <GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
+                        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
                             {/* <ListSubheader component="div">{user.username + "'s"} past memes</ListSubheader> */}
                         </GridListTile>
                         {tileData.map((tile) => (
                             <GridListTile key={tile.img}>
-                                <img src={tile.img} alt={tile.title}/>
+                                <img src={tile.img} alt={tile.title} />
                                 <GridListTileBar
                                     title={tile.title}
                                     subtitle={<span>by: {tile.author}</span>}
                                     actionIcon={
-                                        <IconButton aria-label={`info about ${tile.title}`}
-                                                    className={classes.icon}>
-                                            <InfoIcon/>
+                                        <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
+                                            <InfoIcon />
                                         </IconButton>
                                     }
                                 />

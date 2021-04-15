@@ -7,12 +7,21 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import {Post, Header, PostFeed, Footer} from '../../../Components/index';
 import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
         marginTop: theme.spacing(3),
     },
+    root: {
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+    },
 }));
+
 
 const sections = [
     { title: 'Please', url: '#' },
@@ -35,6 +44,7 @@ export default function HomePage(props) {
     const [posts,setPosts] = useState([]);
     let user = null;
     const classes = useStyles();
+    const [openAlert, setOpenAlert] = useState(false);
 
     // Checking the backend to see if the user is logged in
     if(localStorage.getItem("user") === null || undefined) {
@@ -44,10 +54,10 @@ export default function HomePage(props) {
     else {
         user = JSON.parse(localStorage.user)
     }
-
     // Create Date references for filtering posts
     var now = new Date();
     
+
     useEffect(() => {
         if(user !== null){
         axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
@@ -71,12 +81,25 @@ export default function HomePage(props) {
         
       }}, []);
 
+    useEffect(() => {
+        if(window.location.href.includes("#"))
+            setOpenAlert(true);
+    }, []);
+
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
     
     return (
         <div>
+            {openAlert ?
+                <div className={classes.root}>
+                    <Alert severity="error" onClose={() => {setOpenAlert(false)}}>That user does not exist!</Alert>
+                </div>
+                :
+                null
+            }
+
             <CssBaseline />
             <Container maxWidth="lg">
                 <Header title="MemeSpace" sections={sections} />
