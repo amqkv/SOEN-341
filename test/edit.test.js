@@ -6,11 +6,21 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
 
+const sinon = require('sinon');
+let sandbox = sinon.createSandbox();
 
 chai.should();
 chai.use(chaiHttp);
 
 describe("edit API", () => {
+
+    beforeEach(()=>{
+        sandbox.stub(process.env, 'DB_CONNECTION').value('fake db');
+        sandbox.stub(process.env, 'AWS_ACCESS_KEY_ID').value('fake aws access key');
+        sandbox.stub(process.env, 'AWS_SECRET_ACCESS_KEY').value('fake aws secret key');
+        sandbox.stub(process.env, 'S3_BUCKET').value('fake bucket');
+        sandbox.stub(process.env, 'secretOrKey').value('fake key');
+    })
 
     // Testing the editEmail endpoint
     describe("edit email request", () => {
