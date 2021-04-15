@@ -75,10 +75,7 @@ export default function LoginTemplate(props){
                     }
                 })
                 .catch(error => { console.log(error) });
-            setLoginEmail("");
-            setLoginPw("");
         }
-
     }
 
     // Register form validation
@@ -185,11 +182,11 @@ export default function LoginTemplate(props){
                         <Form id="login_form" noValidate validated={loginValidated}>
                             <Form.Group>
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control 
+                                <Form.Control
                                     id="loginEmail"
                                     name="loginEmail"
-                                    onChange={handleChange} 
-                                    type="email" 
+                                    onChange={handleChange}
+                                    type="email"
                                     placeholder="Enter email"
                                     required
                                 />

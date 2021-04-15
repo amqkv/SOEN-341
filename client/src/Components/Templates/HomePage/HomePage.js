@@ -18,23 +18,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         '& > * + *': {
           marginTop: theme.spacing(2),
+          textAlign: "center"
         },
     },
 }));
-
-
-const sections = [
-    { title: 'Please', url: '#' },
-    { title: 'Give', url: '#' },
-    { title: 'Us', url: '#' },
-    { title: 'A', url: '#' },
-    { title: 'Good', url: '#' },
-    { title: 'Grade', url: '#' },
-    { title: 'Because', url: '#' },
-    { title: 'We', url: '#' },
-    { title: 'Worked', url: '#' },
-    { title: 'Hard', url: '#' },
-];
 
 
 //Combine this with backend DB
@@ -46,6 +33,8 @@ export default function HomePage(props) {
     const classes = useStyles();
     const [openAlert, setOpenAlert] = useState(false);
 
+    useEffect(() => {   
+
     // Checking the backend to see if the user is logged in
     if(localStorage.getItem("user") === null || undefined) {
         window.location.assign("/login#redirect");
@@ -56,16 +45,16 @@ export default function HomePage(props) {
     }
     // Create Date references for filtering posts
     var now = new Date();
-    
+
 
     useEffect(() => {
         if(user !== null){
         axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
-        .then(res => { 
-            // console.log(res.data)
+        .then(res => {
             for(let x = 0; x < res.data.length; x++){
-                // console.log(res.data[x]['date'])
                 posts.push(<Post 
+                        width="600px"
+                        height="700px"
                         author={ res.data[x]['username'] }
                         date={ res.data[x]['date'] }
                         base64img={res.data[x]['image']['file']}
@@ -79,8 +68,7 @@ export default function HomePage(props) {
             
         }).catch(error => { console.log(error) });
         
-      }}, []);
-
+      }}, [posts, user]);
     useEffect(() => {
         if(window.location.href.includes("#"))
             setOpenAlert(true);
@@ -102,12 +90,10 @@ export default function HomePage(props) {
 
             <CssBaseline />
             <Container maxWidth="lg">
-                <Header title="MemeSpace" sections={sections} />
-                <feed>
+                <Header title="MemeSpace" />
                     <Grid container className={classes.mainGrid} direction="column">
                         <PostFeed title="The Meme Feed" posts={posts} />
                     </Grid>
-                </feed>
             </Container>
             <Footer title="Footer" description="This is a footer :^)" />
         </div>

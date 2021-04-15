@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import "./PostTemplate.css";
 import Button from 'react-bootstrap/Button';
@@ -11,15 +11,12 @@ export default function Comments(props){
     // Storing the comment value in the state
     function handleChange(e){
         const { name, value } = e.target;
-        console.log(comment)
-
         if(name ==="commentContent"){
             setComment(value);
         }
     }
 
     function handleSubmit(e){
-        console.log("handleSubmit")
         axios.post("http://localhost:5000/api/comments/comments", { author: JSON.parse(localStorage.getItem("user")).username, content: comment, postID: props.postID })
             .then(res => {
                 console.log(res.data);
