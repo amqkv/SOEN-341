@@ -2,5 +2,12 @@ language: node_js
 node_js:
   - 14
 before_script :
+  - npm install
   - cd client
   - npm install
+script:
+  - npm test
+  - npm run build
+  - cd ../
+  - npm test
+  - npm run build
