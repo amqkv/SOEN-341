@@ -16,7 +16,9 @@ describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
 
         beforeEach(()=>{
+            console.log(process.env.S3_BUCKET)
             sandbox.stub(process.env, 'S3_BUCKET').value('test-bucket');
+            console.log(process.env.S3_BUCKET)
         })
 
         // Testing the getUserPosts endpoint
