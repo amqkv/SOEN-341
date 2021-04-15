@@ -4,6 +4,10 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
+//dotenv config
+const dotenv = require('dotenv');
+dotenv.config({path: './../../.env-mock'});
+
 const userData = require("./__tests__/user.json");
 
 const localStorageMock = {
