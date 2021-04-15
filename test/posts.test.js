@@ -3,12 +3,16 @@ let chaiHttp = require("chai-http");
 let server = require("../server");
 const { expect } = require("chai");
 
-
 chai.should();
 chai.use(chaiHttp);
 
+const dotenv = require('dotenv');
+dotenv.config({path: './../../.env-mock'});
+
 describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
+
+        process.env.S3_BUCKET = "some string";
 
         // Testing the getUserPosts endpoint
         it("should return an array of posts made by that user only", (done) => {
