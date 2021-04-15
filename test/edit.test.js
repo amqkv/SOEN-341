@@ -1,23 +1,17 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
-
-let proxyquire = require('proxyquire')
-    , pathStub = { };
-let server = proxyquire('../server', {'posts': pathStub});
-//let server = require("../server");
-
+let server = require("../server");
 const { expect } = require("chai");
 const bcrypt = require("bcryptjs");
-
 const User = require("../models/User");
-
-
 
 chai.should();
 chai.use(chaiHttp);
 
+const envPath = './../.env-mock';
+require('dotenv').config({path:envPath});
+
 describe("edit API", () => {
-    pathStub.posts = {};
     // Testing the editEmail endpoint
     describe("edit email request", () => {
         describe("when the correct password is entered", () => {

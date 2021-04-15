@@ -1,22 +1,15 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
-
-let proxyquire = require('proxyquire')
-    , pathStub = { };
-let server = proxyquire('../server', {'posts': pathStub});
-//let server = require("../server");
-
-const posts = require("../routes/api/posts");
+let server = require("../server");
 const { expect } = require("chai");
 
 chai.should();
 chai.use(chaiHttp);
 
+const envPath = './../.env-mock';
+require('dotenv').config({path:envPath});
 
 describe("follow API", () => {
-
-    pathStub.posts = {};
-
     // Testing the checkfollow endpoint
     describe("check follow request", () => {
         it("should return an object containing followers and following lists of dummy_b", (done) => {
