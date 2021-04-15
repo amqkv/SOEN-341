@@ -1,20 +1,19 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
-let server = require("../server");
+
+let proxyquire = require('proxyquire')
+    , pathStub = { };
+let server = proxyquire('../server', {'posts': pathStub});
+//let server = require("../server");
+
 const posts = require("../routes/api/posts");
 const { expect } = require("chai");
 
 chai.should();
 chai.use(chaiHttp);
 
-const sinon = require('sinon');
-let sandbox = sinon.createSandbox();
 
 describe("follow API", () => {
-
-    beforeEach(()=>{
-        sandbox.mock(posts)
-    })
 
     // Testing the checkfollow endpoint
     describe("check follow request", () => {

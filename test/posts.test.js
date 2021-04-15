@@ -8,14 +8,9 @@ chai.should();
 chai.use(chaiHttp);
 
 const sinon = require('sinon');
-let sandbox = sinon.createSandbox();
 
 describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
-
-        beforeEach(()=>{
-            sandbox.mock(posts)
-        })
 
         // Testing the getUserPosts endpoint
         it('useless test', () => console.log("called"))
