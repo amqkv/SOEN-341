@@ -3,6 +3,8 @@ let chaiHttp = require("chai-http");
 let server = require("../server");
 const { expect } = require("chai");
 
+process.env.S3_BUCKET = "some key";
+
 chai.should();
 chai.use(chaiHttp);
 
