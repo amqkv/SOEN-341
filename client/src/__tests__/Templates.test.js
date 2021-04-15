@@ -10,7 +10,6 @@ beforeEach(() => {
     logDummyUser();
 })
 
-
 it("renders login page without crashing", () => {
     const div = document.createElement("div");
     ReactDOM.render(<LoginTemplate/>, div);

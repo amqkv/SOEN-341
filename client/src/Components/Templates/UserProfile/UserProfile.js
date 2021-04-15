@@ -54,54 +54,57 @@ export default function UserProfile(props) {
         currentUsername: "",
         visitedUsername: ""
     };
+    let allowed = false;
 
-    // Checking the backend to see if the user is logged in
+    // Checking the local storage to see if the user is logged in
     if(localStorage.getItem("user") === null || undefined) {
         window.location.assign("/login#redirect");
         //return null;
+        allowed = false;
     }
     else {
         usernameS = {
             currentUsername: JSON.parse(localStorage.getItem("user")).username,
             visitedUsername: window.location.href.split("/")[4]
         };
+        allowed = true;
     }
 
 
-    // Check if user already follows the other
-    useEffect(() => {
-        axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
-            .then(res => {
-                if (res.data.followersList.includes(usernameS.currentUsername)) {
-                    //show unfollow
-                    setFollows(true);
-                } else {
-                    //show follow
-                    setFollows(false);
-                }
-           })
-           .catch(error => console.log(error));
 
-        axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
-        .then(res => {
-            console.log(res);
-            if(res.data.error){
-                window.location.href = "/Home/#";
-            }
-            setUser(res.data.user);
-        })
-    }, []);
-
-    // Get all posts made by this profile's user
     useEffect(() => {
-        axios.post("http://localhost:5000/api/posts/getUserPosts", {username: window.location.href.split("/")[4]})
-        .then(res => {
-            console.log(res);
-            console.log(res.data)
-            setPosts(res.data);
-        })
-        .catch(err => console.log(err));
-    }, []);
+        if(allowed) {
+            // Check if user already follows the other
+            axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
+                .then(res => {
+                    if (res.data.followersList.includes(usernameS.currentUsername)) {
+                        //show unfollow
+                        setFollows(true);
+                    } else {
+                        //show follow
+                        setFollows(false);
+                    }
+                })
+                .catch(err => console.log(err))
+
+            //Initialize user info
+            axios.get("http://localhost:5000/api/users/getUser?username=" + usernameS.visitedUsername)
+                .then(res => {
+                    console.log(res);
+                    setUser(res.data.user);
+                }).catch(error => { console.log(error) });
+
+
+            // Get all posts made by this profile's user
+            axios.post("http://localhost:5000/api/posts/getUserPosts", {username: window.location.href.split("/")[4]})
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data)
+                    setPosts(res.data);
+                })
+                .catch(err => console.log(err));
+        }}, []);
+
 
     function handleFollow() {
         axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
@@ -136,20 +139,20 @@ export default function UserProfile(props) {
             <Container maxWidth="lg">
                 <Header title="MemeSpace" />
                 {/* Profile information (name, number of posts/followers/following)  */}
-                    <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
-                    <div className="profile-picture-container">
-                        <img alt="Profile Avatar" className="profile-picture" src={Pepette} height="150px" width="150px"/>
-                    </div>
-                    <ProfileStats posts={posts} user={user || null}/>
-                    <Container className={classes.followBtnContainer}>
-                        <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
+                <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
+                <div className="profile-picture-container">
+                    <img alt="Profile Avatar" className="profile-picture" src={Pepette} height="150px" width="150px"/>
+                </div>
+                <ProfileStats posts={posts} user={user || null}/>
+                <Container className={classes.followBtnContainer}>
+                    <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
+                </Container>
+                {usernameS.currentUsername === usernameS.visitedUsername ?
+                    <Container className={classes.editContainer}>
+                        <Button onClick={handleOpen} variant="secondary" >Edit Account</Button>
                     </Container>
-                    {usernameS.currentUsername === usernameS.visitedUsername ?
-                        <Container className={classes.editContainer}>
-                            <Button onClick={handleOpen} variant="secondary" >Edit Account</Button>
-                        </Container>
-                        :
-                        null}
+                    :
+                    null}
             </Container>
             {/* Feed containing all of visited user's posts */}
             <Container>
@@ -172,7 +175,7 @@ export default function UserProfile(props) {
                                 />
                             </div>
                         )
-                   })}
+                    })}
                 </Grid>
             </Container>
             <Footer title="Footer" description="This is a footer"/>
