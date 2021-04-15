@@ -9,10 +9,15 @@ chai.use(chaiHttp);
 const dotenv = require('dotenv');
 dotenv.config({path: './../../.env-mock'});
 
+const sinon = require('sinon');
+let sandbox = sinon.createSandbox();
+
 describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
 
-        process.env.S3_BUCKET = "some string";
+        beforeEach(()=>{
+            sandbox.stub(process.env, 'S3_BUCKET').value('test-bucket');
+        })
 
         // Testing the getUserPosts endpoint
         it("should return an array of posts made by that user only", (done) => {
