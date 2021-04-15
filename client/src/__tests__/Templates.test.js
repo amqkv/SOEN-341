@@ -65,18 +65,6 @@ describe("Test HomePage Component", () =>{
 
 
 describe("Test Header Component", () => {
-    const sections = [
-        { title: 'Please', url: '#' },
-        { title: 'Give', url: '#' },
-        { title: 'Us', url: '#' },
-        { title: 'A', url: '#' },
-        { title: 'Good', url: '#' },
-        { title: 'Grade', url: '#' },
-        { title: 'Because', url: '#' },
-        { title: 'We', url: '#' },
-        { title: 'Worked', url: '#' },
-        { title: 'Hard', url: '#' },
-    ];
     const realLocation = window.location
     beforeAll(() => {
         delete window.location
@@ -89,16 +77,16 @@ describe("Test Header Component", () => {
     it("renders header without crashing", function() {
         const div = document.createElement("home");
 
-        ReactDOM.render(<Header sections={sections}/>, div);
+        ReactDOM.render(<Header/>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
     it("logout using the button in the header", () =>{
-        render(<Header sections={sections}/>)
+        render(<Header/>)
         userEvent.click(screen.getByText('Logout'))
         expect(window.location.assign).toHaveBeenCalled();
     });
     it("go to repo using the button in the header", () =>{
-        render(<Header sections={sections}/>)
+        render(<Header/>)
         window.open = jest.fn();
         const spy = jest.spyOn(window, "open")
         userEvent.click(screen.getByText('The Github Repo'))

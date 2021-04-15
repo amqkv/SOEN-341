@@ -33,8 +33,6 @@ export default function HomePage(props) {
     const classes = useStyles();
     const [openAlert, setOpenAlert] = useState(false);
 
-    useEffect(() => {   
-
     // Checking the backend to see if the user is logged in
     if(localStorage.getItem("user") === null || undefined) {
         window.location.assign("/login#redirect");
@@ -43,8 +41,6 @@ export default function HomePage(props) {
     else {
         user = JSON.parse(localStorage.user)
     }
-    // Create Date references for filtering posts
-    var now = new Date();
 
 
     useEffect(() => {

@@ -97,8 +97,6 @@ export default function Header(props) {
     };
 
 
-
-
     const sections = [
         { title: 'Please', url: '#' },
         { title: 'Give', url: '#' },

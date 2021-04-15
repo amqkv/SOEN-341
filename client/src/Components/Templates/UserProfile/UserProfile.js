@@ -50,7 +50,6 @@ export default function UserProfile(props) {
     const [postViewed, setPostViewed] = useState();
     const [open, setOpen] = useState(false);
 
-    const classes = useStyles();
     let usernameS = {
         currentUsername: "",
         visitedUsername: ""
