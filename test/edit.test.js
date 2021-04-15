@@ -2,7 +2,7 @@ let chai = require("chai");
 let chaiHttp = require("chai-http");
 
 let proxyquire = require('proxyquire')
-    , pathStub = {};
+    , pathStub = { };
 let server = proxyquire('../server', {'posts': pathStub});
 //let server = require("../server");
 
