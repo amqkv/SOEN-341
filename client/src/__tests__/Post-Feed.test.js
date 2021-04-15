@@ -22,5 +22,6 @@ describe("post feed request", () => {
         expect(postSpy).toHaveBeenCalled();
 
         postSpy.mockRestore();
+        ReactDOM.unmountComponentAtNode(div)
     });
 });
