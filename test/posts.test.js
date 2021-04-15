@@ -3,9 +3,11 @@ let chaiHttp = require("chai-http");
 let server = require("../server");
 const { expect } = require("chai");
 
-
 chai.should();
 chai.use(chaiHttp);
+
+const dotenv = require('dotenv');
+dotenv.config({path: './../../.env-mock'});
 
 describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
