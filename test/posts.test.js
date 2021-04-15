@@ -6,9 +6,6 @@ const { expect } = require("chai");
 chai.should();
 chai.use(chaiHttp);
 
-const envPath = './../.env-mock';
-require('dotenv').config({path:envPath});
-
 describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
 

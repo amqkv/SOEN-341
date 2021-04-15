@@ -6,8 +6,6 @@ const { expect } = require("chai");
 chai.should();
 chai.use(chaiHttp);
 
-const envPath = './../.env-mock';
-require('dotenv').config({path:envPath});
 
 describe("follow API", () => {
     // Testing the checkfollow endpoint
