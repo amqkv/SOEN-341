@@ -97,8 +97,6 @@ export default function Header(props) {
     };
 
 
-
-
     const sections = [
         { title: 'Please', url: '#' },
         { title: 'Give', url: '#' },
@@ -118,7 +116,7 @@ export default function Header(props) {
         if(localStorage.getItem("user") != null){
             localStorage.clear();
         }
-        window.location = "/login";
+        window.location.assign("/login");
     }
 
 
@@ -153,10 +151,9 @@ export default function Header(props) {
                     <a href="/Home" style={{textDecoration: "none", color: "#343a40"}}><img width="250px" style={{paddingTop:"10px", marginLeft:"90px"}} src={logo} alt={props}/></a>
                 </Typography>
 
-                <Form class="form-group" component="form" className={classes.root}>
+                <Form component="form" className={classes.root}>
                     <Form.Group>
                         <Form.Control
-                            class="form-group"
                             type="text"
                             className={classes.input}
                             id="searchInput"

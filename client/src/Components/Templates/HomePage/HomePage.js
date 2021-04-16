@@ -31,7 +31,7 @@ export default function HomePage(props) {
     const [isLoading, setLoading] = useState(true);
     const [loaderDisplay, setLoaderDisplay] = useState("None")
     const [current_posts,setCurrentPosts] = useState([]);
-    const user = JSON.parse(localStorage.user)
+    let user = null;
     const classes = useStyles();
     const [openAlert, setOpenAlert] = useState(false);
 
@@ -61,8 +61,8 @@ export default function HomePage(props) {
             setCurrentPosts(current_posts);
 
             axios.get("/api/posts/getOlderFeed",{params: { userID: user["_id"] , forwardDateLimit: forwardLimit}})
-            .then(res => { 
-                
+            .then(res => {
+
                 for(let x = 0; x < res.data.length; x++){
 
                     let insert = true
@@ -74,7 +74,7 @@ export default function HomePage(props) {
                     }
 
                     if (insert){
-                        current_posts.push(<Post 
+                        current_posts.push(<Post
                             author={ res.data[x]['username'] }
                             date={ res.data[x]['date'] }
                             base64img={res.data[x]['image']['file']}
@@ -85,42 +85,52 @@ export default function HomePage(props) {
                         )
 
                     }
-                    
+
                 }
                 setCurrentPosts(current_posts);
                 setLoaderDisplay("None");
-            }).catch(error => { console.log(error) });   
+            }).catch(error => { console.log(error) });
         }
     }
 
-    useEffect(() => {   
 
 
+    // Checking the backend to see if the user is logged in
+    if(localStorage.getItem("user") === null || undefined) {
+        window.location.assign("/login#redirect");
+        //return null;
+    }
+    else {
+        user = JSON.parse(localStorage.user)
+    }
+
+
+    useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         setLoading(true);
-        axios.get("/api/posts/getFeed",{params: { userID: user["_id"] , forwardDateLimit: new Date()}})
-        .then(res => { 
-            for(let x = 0; x < res.data.length; x++){
-                current_posts.push(<Post 
-                        width="600px"
-                        height="700px"
-                        author={ res.data[x]['username'] }
-                        date={ res.data[x]['date'] }
-                        base64img={res.data[x]['image']['file']}
-                        fileEncoding={res.data[x]['image']['encoding']}
-                        text={ res.data[x]['description']}
-                        postID={ res.data[x]['postID'] }
-                        comments={ res.data[x]['comments'] } />
-                    )
-            }
-            setLoading(false);
-            
-        }).catch(error => { console.log(error) });
+        if(user !== null) {
+            axios.get("/api/posts/getFeed", {params: {userID: user["_id"], forwardDateLimit: new Date()}})
+                .then(res => {
+                    for (let x = 0; x < res.data.length; x++) {
+                        current_posts.push(<Post
+                            width="600px"
+                            height="700px"
+                            author={res.data[x]['username']}
+                            date={res.data[x]['date']}
+                            base64img={res.data[x]['image']['file']}
+                            fileEncoding={res.data[x]['image']['encoding']}
+                            text={res.data[x]['description']}
+                            postID={res.data[x]['postID']}
+                            comments={res.data[x]['comments']}/>
+                        )
+                    }
+                    setLoading(false);
 
-        if(window.location.href.includes("#"))
-            setOpenAlert(true);
-            
-      }, []);
+                }).catch(error => {
+                console.log(error)
+            });
+
+        }}, []);
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
@@ -128,14 +138,6 @@ export default function HomePage(props) {
     
     return (
         <div>
-            {/* {openAlert ? 
-                <div className={classes.root}>
-                    <Alert severity="error" onClose={() => {setOpenAlert(false)}}>That user does not exist!</Alert>
-                </div>
-                :
-                null
-            } */}
-
             <CssBaseline />
             <Container maxWidth="lg">
                 <Header title="MemeSpace" />
@@ -143,12 +145,8 @@ export default function HomePage(props) {
                         <PostFeed title="The Meme Feed" posts={current_posts}/>
                     </Grid>
             </Container>
-            <div class="loader" style={{display: loaderDisplay }}></div>
+            <div class="loader" style={{display: loaderDisplay }}/>
             <Footer title="Footer" description="This is a footer :^)" />
         </div>
     );
-
-    return () => {
-        window.removeEventListener('scroll', handleScroll);
-    };
 }

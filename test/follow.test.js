@@ -6,8 +6,8 @@ const { expect } = require("chai");
 chai.should();
 chai.use(chaiHttp);
 
-describe("follow API", () => {
 
+describe("follow API", () => {
     // Testing the checkfollow endpoint
     describe("check follow request", () => {
         it("should return an object containing followers and following lists of dummy_b", (done) => {

@@ -3,15 +3,13 @@ let chaiHttp = require("chai-http");
 let server = require("../server");
 const { expect } = require("chai");
 const bcrypt = require("bcryptjs");
-
 const User = require("../models/User");
-
 
 chai.should();
 chai.use(chaiHttp);
 
-describe("edit API", () => {
 
+describe("edit API", () => {
     // Testing the editEmail endpoint
     describe("edit email request", () => {
         describe("when the correct password is entered", () => {
