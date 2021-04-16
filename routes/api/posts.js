@@ -112,7 +112,7 @@ router.get("/getFeed",(async function (req, res) {
         var relevant_posts = await Post.find({'username': { $in: user_data[0].following }, 'date':{ $lte: two_days_ago}}).sort({ date: -1 }).limit(max_posts_in_feed);
 
         // If the amount of posts smaller than limit, fetch random feeds to compensate
-        if ( relevant_posts.length < 10 ){
+        if ( relevant_posts.length < max_posts_in_feed ){
 
             var random_recent_posts = []
             var selected_post_ids = []
@@ -136,6 +136,44 @@ router.get("/getFeed",(async function (req, res) {
     }
 }));
 
+router.get("/getOlderFeed",(async function (req, res) {
+    try {
+    
+        // Get user data
+        var user_data = await User.find({ '_id': req.query.userID });
+
+        // Perpare following list date limit
+        var forwardDate = new Date(req.query.forwardDateLimit)
+
+        // Fetch posts of followers within the last 2 days
+        var relevant_posts = await Post.find({'username': { $in: user_data[0].following }, 'date':{ $lt: forwardDate}}).sort({ date: -1 }).limit(max_posts_in_feed);
+
+        // If the amount of posts smaller than limit, fetch random feeds to compensate
+        if ( relevant_posts.length < max_posts_in_feed ){
+
+            var random_recent_posts = []
+            var selected_post_ids = []
+            let i = 0
+
+            for (i = 0; i < relevant_posts.length; i++){
+                selected_post_ids.push(relevant_posts[i]['_id'])
+            }
+            
+            random_recent_posts = await Post.find({'_id': { $nin: selected_post_ids }, 'date':{ $lt: forwardDate}}).sort({ date: -1 }).limit(max_posts_in_feed - relevant_posts.length);
+            relevant_posts = relevant_posts.concat(random_recent_posts);
+
+        }
+        console.log("!!!!!")
+        console.log(relevant_posts.length)
+        var posts_data = await fetch_posts_data(relevant_posts)
+        res.json(posts_data)
+
+    } catch(err) {
+        // An error occurred when fetching 
+        console.log(err)
+        return
+    }
+}));
 router.post("/getUserPosts", (async function (req, res){
     let s3_file_params = {};
     let response = null;
