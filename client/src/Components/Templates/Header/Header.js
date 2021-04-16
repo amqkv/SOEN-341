@@ -8,8 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Pepette from "../../../Images/sad_pepette.jpg";
 import {BiImageAdd} from "react-icons/bi";
-import CreatePost from "../test_create_post_form";
+import CreatePost from "./CreatePostForm";
 import logo from "../../../Images/Logo.png";
+import ProfileIcon from '../UserProfile/UserProfileIcon';
 import Form from "react-bootstrap/Form";
 
 
@@ -89,7 +90,6 @@ export default function Header(props) {
 
     const [searchInput, setSearchInput] = useState("");
     const classes = useStyles();
-    const { sections, title } = props;
     const [open, setOpen] = useState(false);
     const state =  {
         results: [],
@@ -98,6 +98,19 @@ export default function Header(props) {
 
 
 
+
+    const sections = [
+        { title: 'Please', url: '#' },
+        { title: 'Give', url: '#' },
+        { title: 'Us', url: '#' },
+        { title: 'A', url: '#' },
+        { title: 'Good', url: '#' },
+        { title: 'Grade', url: '#' },
+        { title: 'Because', url: '#' },
+        { title: 'We', url: '#' },
+        { title: 'Worked', url: '#' },
+        { title: 'Hard', url: '#' },
+    ];
 
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -161,7 +174,9 @@ export default function Header(props) {
                 </Button>
                 {user ?
                     <a href={"/UserProfile/" + user.username}>
-                        <img alt="header_profile_picture" src={Pepette} width="35px" height="35px" style={{ borderRadius: "50%", margin: "5px" }} />
+                        <div  style={{width:"35px", height:"35px", display: "inline-block", borderRadius: "50%", margin: "5px", overflow : "hidden", verticalAlign: "middle" }}>
+                            <ProfileIcon></ProfileIcon>
+                        </div>
                     </a>
                     : null
                 }

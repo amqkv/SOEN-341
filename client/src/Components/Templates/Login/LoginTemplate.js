@@ -75,10 +75,7 @@ export default function LoginTemplate(props){
                     }
                 })
                 .catch(error => { console.log(error) });
-            setLoginEmail("");
-            setLoginPw("");
         }
-
     }
 
     // Register form validation
@@ -193,8 +190,6 @@ export default function LoginTemplate(props){
                                     placeholder="Enter email"
                                     required
                                 />
-                                <input type="text" className="form-control" placeholder="First name">
-                                </input>
                                 <Form.Control.Feedback type="invalid">
                                     Please enter a valid email.
                                 </Form.Control.Feedback>

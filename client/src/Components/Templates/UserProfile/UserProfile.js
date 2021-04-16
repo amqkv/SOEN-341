@@ -2,36 +2,26 @@
 
 import { React, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
 import Button from 'react-bootstrap/Button'
 import axios from 'axios';
+import Post from "../Post/PostTemplate";
+import Pepette from "../../../Images/sad_pepette.jpg";
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+import ViewPostPopup from "../Post/ViewPostPopup";
 import EditAccountPopup from "../edit_account_form";
 
-import {Header, PostFeed, Footer, Post} from '../../index';
+import {Header, Footer} from '../../index';
 import ProfileStats from './ProfileStats';
 
-//Hard coded test images
-//TODO link image fetch to db
-import pepega from '../../../Images/Pepega.png';
-import forever_alone from '../../../Images/forever_alone.jpg';
-import meme_man from '../../../Images/meme_man.jpg';
-import harold from '../../../Images/harold.jpg';
-import pikachu from '../../../Images/shocked pikachu.png';
-
-
+// Styling for the material UI components 
 const useStyles = makeStyles((theme) => ({
     editContainer: {
-        margin: "5px"
+        marginBottom: "3%"
     },
     mainGrid: {
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(1),
     },
     root: {
         display: 'flex',
@@ -46,82 +36,18 @@ const useStyles = makeStyles((theme) => ({
     icon: {
         color: 'rgba(255, 255, 255, 0.54)',
     },
+    followBtnContainer: {
+        marginBottom: "0.5%"
+    }
 }));
 
-const sections = [
-    { title: 'Please', url: '#' },
-    { title: 'Give', url: '#' },
-    { title: 'Us', url: '#' },
-    { title: 'A', url: '#' },
-    { title: 'Good', url: '#' },
-    { title: 'Grade', url: '#' },
-    { title: 'Because', url: '#' },
-    { title: 'We', url: '#' },
-    { title: 'Worked', url: '#' },
-    { title: 'Hard', url: '#' },
-];
-
-//Combine this with backend DB
-const post1 =
-    <Post
-        showActions={false}
-        author="Olivier"
-        date="2021-02-11"
-        title="forever alone"
-        imagePath={forever_alone}
-        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    />
-
-const posts = [post1];
-    //Gets the user profile to display it on top of page
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log(user);
-
-    // User's past posts 
-    const tileData = [
-        {
-            img: meme_man,
-            title: 'meme man',
-            author: user ? user.username : "",
-        },
-        {
-            img: harold,
-            title: 'harold',
-            author: user ? user.username : "",
-        },
-        {
-            img: pikachu,
-            title: 'shocked pikachu',
-            author: user ? user.username : "",
-        },
-        {
-            img: pepega,
-            title: 'pepega',
-            author: user ? user.username : "",
-        },
-        {
-            img: harold,
-            title: 'harold',
-            author: user ? user.username : "",
-        },
-        {
-            img: pikachu,
-            title: 'shocked pikachu',
-            author: user ? user.username : "",
-        },
-    ];
-
-    //const profile = getFromBackend();
-    const profile = {
-        posts: tileData.length,
-        followers: 51289,
-        following: 9687
-    }
-
 export default function UserProfile(props) {
-
+    const classes = useStyles();
     const [follows, setFollows] = useState();
     const [user, setUser] = useState();
+    const [posts, setPosts] = useState([]);
+    const [openPost, setOpenPost] = useState(false);
+    const [postViewed, setPostViewed] = useState();
     const [open, setOpen] = useState(false);
 
     // Checking the backend to see if the user is logged in
@@ -129,8 +55,6 @@ export default function UserProfile(props) {
         if(localStorage.getItem("user") === null)
             window.location = "/login#redirect";
     }, [])
-
-    const classes = useStyles();
 
     // Checking the backend to see if the user is logged in
     useEffect(() => {
@@ -140,7 +64,7 @@ export default function UserProfile(props) {
 
     const usernameS = {currentUsername: JSON.parse(localStorage.getItem("user")).username, visitedUsername: window.location.href.split("/")[4]};
 
-    //Check if user already follows the other
+    // Check if user already follows the other
     useEffect(() => {
        axios.post("http://localhost:5000/api/follow/checkfollow", usernameS)
            .then(res => {
@@ -154,7 +78,7 @@ export default function UserProfile(props) {
                 }
            })
            .catch(error => console.log(error));
-
+        
         axios.get("http://localhost:5000/api/users/getUser?username=" + window.location.href.split("/")[4])
         .then(res => {
             console.log(res);
@@ -163,7 +87,18 @@ export default function UserProfile(props) {
             }
             setUser(res.data.user);
         })
-    }, [])
+    }, []);
+
+    // Get all posts made by this profile's user
+    useEffect(() => {
+        axios.post("http://localhost:5000/api/posts/getUserPosts", {username: window.location.href.split("/")[4]})
+        .then(res => {
+            console.log(res);
+            console.log(res.data)
+            setPosts(res.data);
+        })
+        .catch(err => console.log(err));
+    }, []);
 
     function handleFollow(){
         axios.post("http://localhost:5000/api/follow/" + (follows ? "unfollow" : "follow"), usernameS)
@@ -176,7 +111,12 @@ export default function UserProfile(props) {
                     .catch(error => console.log(error));
             })
             .catch(error => console.log(error));
-        
+    }
+
+    // Opens a popup to view the post & be able to comment
+    function handleViewPost(post){
+        setPostViewed(post);
+        setOpenPost(!openPost);
     }
 
     function handleOpen(){
@@ -186,17 +126,17 @@ export default function UserProfile(props) {
     console.log(props.currentUser);
     return !user ? null : (
         <div>
+            {openPost ? <ViewPostPopup open={openPost} onClose={handleViewPost} post={postViewed}/> : null}
             {open ? <EditAccountPopup open={open} onClose={handleOpen}/> : null}
-            <CssBaseline />
             <Container maxWidth="lg">
-                <Header title="MemeSpace" sections={sections} currentUser={props.currentUser} />
-                <feed>
+                <Header title="MemeSpace" />
+                {/* Profile information (name, number of posts/followers/following)  */}
                     <h1 style={{fontWeight:"550"}}>{window.location.href.split("/")[4]}</h1>
-
-                    <div className="profile-stats">
-                        <ProfileStats posts={profile.posts} followers={user.followers.length} following={user.following.length} />
+                    <div className="profile-picture-container">
+                        <img alt="Profile Avatar" className="profile-picture" src={Pepette} height="150px" width="150px"/>
                     </div>
-                    <Container>
+                    <ProfileStats posts={posts} user={user || null}/>
+                    <Container className={classes.followBtnContainer}>
                         <Button onClick={handleFollow} variant="info">{follows ? "Unfollow" : "Follow"}</Button>
                     </Container>
                     {usernameS.currentUsername === usernameS.visitedUsername ? 
@@ -205,37 +145,30 @@ export default function UserProfile(props) {
                         </Container>
                         :
                         null}  
-                    <Grid container className={classes.mainGrid}>
-                        <PostFeed title="Profile Page" posts={posts} />
-                    </Grid>
-
-                </feed>
             </Container>
+            {/* Feed containing all of visited user's posts */}
             <Container>
-                <br></br>
-                <h3>Browse olders memes from {user ? user.username : ""}</h3>
-
-                <div className={classes.root}>
-                    <GridList cellHeight={180} className={classes.gridList}>
-                        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-                            {/* <ListSubheader component="div">{user.username + "'s"} past memes</ListSubheader> */}
-                        </GridListTile>
-                        {tileData.map((tile) => (
-                            <GridListTile key={tile.img}>
-                                <img src={tile.img} alt={tile.title} />
-                                <GridListTileBar
-                                    title={tile.title}
-                                    subtitle={<span>by: {tile.author}</span>}
-                                    actionIcon={
-                                        <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-                                            <InfoIcon />
-                                        </IconButton>
-                                    }
+                <Grid container justify="flex-start" spacing={6} >
+                    <Divider />
+                    {posts.map(post => {
+                        return(
+                            <div onClick={() => handleViewPost(post)}>
+                                <Post 
+                                    width="300px" 
+                                    author={post.username} 
+                                    date={post.date} 
+                                    base64img={post.image.file} 
+                                    fileEncoding={post.image.encoding} 
+                                    text={post.description} 
+                                    postID={post.postID} 
+                                    comments={post.comments} 
+                                    showActions={false}
+                                    
                                 />
-                            </GridListTile>
-                        ))}
-                    </GridList>
-                </div>
+                            </div>
+                        )
+                   })}
+                </Grid>
             </Container>
             <Footer title="Footer" description="This is a footer" />
         </div>

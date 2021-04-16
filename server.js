@@ -68,4 +68,4 @@ const port = 5000;
 
 app.listen(port, () => console.log("\nServer up and running on port " + port + "!!"));
 
-module.exports = app;
+module.exports = app

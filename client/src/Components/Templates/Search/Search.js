@@ -1,6 +1,4 @@
 import { React, useState, useEffect } from 'react';
-
-
 import axios from "axios";
 import UserDisplay from "./UserDisplay"
 import {Container} from "@material-ui/core";
@@ -8,7 +6,6 @@ import {Header} from "../../index";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Footer from "../Footer/Footer";
-
 
 export default function Search(props) {
 
