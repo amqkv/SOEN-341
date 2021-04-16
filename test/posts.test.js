@@ -10,7 +10,6 @@ describe("posts API", () => {
     describe("when fetching a specific user's posts", () =>{
 
         // Testing the getUserPosts endpoint
-        it('useless test', () => console.log("called"))
         it("should return an array of posts made by that user only", (done) => {
             chai.request(server)
                 .post("/api/posts/getUserPosts")
@@ -28,6 +27,6 @@ describe("posts API", () => {
                     expect(isMadeByUser).to.be.true;
                     done();
                 })
-        })
+        }).timeout(10000)
     })
 })
