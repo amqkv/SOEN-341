@@ -57,7 +57,7 @@ export default function HomePage(props) {
 
             setLoaderDisplay("block")
             var forwardLimit = findOldestDate()
-            console.log("!!!!!!!!",forwardLimit)
+
             setCurrentPosts(current_posts);
 
             axios.get("/api/posts/getOlderFeed",{params: { userID: user["_id"] , forwardDateLimit: forwardLimit}})
@@ -116,12 +116,11 @@ export default function HomePage(props) {
             setLoading(false);
             
         }).catch(error => { console.log(error) });
-        
-      }, [posts, user]);
-    useEffect(() => {
+
         if(window.location.href.includes("#"))
             setOpenAlert(true);
-    }, []);
+            
+      }, []);
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
@@ -129,13 +128,13 @@ export default function HomePage(props) {
     
     return (
         <div>
-            {openAlert ? 
+            {/* {openAlert ? 
                 <div className={classes.root}>
                     <Alert severity="error" onClose={() => {setOpenAlert(false)}}>That user does not exist!</Alert>
                 </div>
                 :
                 null
-            }
+            } */}
 
             <CssBaseline />
             <Container maxWidth="lg">
