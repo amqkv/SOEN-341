@@ -58,3 +58,8 @@ Pull requests will have to be reviewed by minimum 3 other team members (excludin
 
 ## Architecture
 ![Block Diagram](./block_diagram.png)
+
+## Coding Convention
+Standard React Convention: 
+Components/Main functions : PascalCase
+Other Functions and variables: camelCase
