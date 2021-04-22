@@ -5,8 +5,10 @@ before_script:
 - npm install
 - cd client
 - npm install
+- cd ..
 script:
 - npm run lint
+- cd client
 - npm test
 - cd ../
 - npm test
